@@ -27,3 +27,13 @@ client/
 |   └── index.js # Starting up file
 └── ...
 ```
+
+### Quotes, sentences and generated text
+
+There are some options to get/generate the text that will be typed by the players
+
+- NPM packages
+- Pre loaded static data using online datasets
+- External API
+    - API Quotable IO
+- Integrate Open AI to generate
