@@ -16,11 +16,11 @@ app.get('/api/hello', (req, res) => {
 });
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, 'client/build')));
+app.use(express.static(path.join(__dirname, '../../client/build')));
 
 // Handler for React routing
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+    res.sendFile(path.join(__dirname, '../../client/build', 'index.html'));
 });
 
 const PORT = process.env.PORT || 5000;
