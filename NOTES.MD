@@ -37,3 +37,11 @@ There are some options to get/generate the text that will be typed by the player
 - External API
     - API Quotable IO
 - Integrate Open AI to generate
+
+### Color Scheme
+
+- **Dark**: <span style="background-color: #161718; color: #161718; padding: 2px 5px; border-radius: 3px;">#161718</span> #161718
+- **Grey**: <span style="background-color: #6B6E70; color: #6B6E70; padding: 2px 5px; border-radius: 3px;">#6B6E70</span> #6B6E70
+- **Green**: <span style="background-color: #86C232; color: #86C232; padding: 2px 5px; border-radius: 3px;">#86C232</span> #86C232
+- **White**: <span style="background-color: #FFFFFF; color: white; padding: 2px 5px; border-radius: 3px;">#FFFFFF</span> #FFFFFF
+
