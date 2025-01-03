@@ -1,11 +1,11 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import Lobby from "./components/lobby/Lobby";
+import Home from "./features/Home/Home";
 
 function App() {
   return (
     <Routes>
       <Route path='/' element={<Navigate to='/home' replace />} />
-      <Route path='/home' element={<Lobby />} />
+      <Route path='/home' element={<Home />} />
     </Routes>
   );
 }
