@@ -2,11 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+:root {
+  --dark: #161718;
+  --grey: #6B6E70;
+  --green: #86C232;
+}
+
 body {
+  background-color: var(--dark);
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  font-family: "Poppins", serif !important; 
+  font-weight: 500 !important;
+}
+
+a {
+  cursor: pointer;
+  text-decoration: none;
 }
