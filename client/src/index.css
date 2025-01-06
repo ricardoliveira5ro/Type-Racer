@@ -25,6 +25,10 @@ body {
   font-weight: 500 !important;
 }
 
+p {
+  font-weight: 300 !important;
+}
+
 a {
   cursor: pointer;
   text-decoration: none;
