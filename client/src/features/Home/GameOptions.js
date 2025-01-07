@@ -1,4 +1,5 @@
 import { Wand, BookText, Gamepad2 } from 'lucide-react';
+
 function GameOptions() {
     return (
         <div>
