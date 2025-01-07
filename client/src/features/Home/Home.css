@@ -1,0 +1,11 @@
+/* High Scores */
+
+.tabs button {
+    transition-duration: 0.6s;
+    transition-property: background-color, color;
+    @apply px-5 py-3 rounded-md
+}
+
+.tabs button.active {
+    @apply text-white bg-[var(--green)]
+}
