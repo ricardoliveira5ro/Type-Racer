@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 import { UserRound } from 'lucide-react';
 
+import './Header.css'
+
 function Header() {
     return (
         <div className='flex justify-between items-center bg-white rounded-md px-5 py-3'>
-            <Link to={'/home'} className='text-lg'>Type Racer</Link>
+            <Link to={'/home'} className='text-xl brand-title'>Type Racer</Link>
             <div className='flex items-center gap-x-5'>
                 <UserRound size={28} />
                 <button className='bg-[var(--dark)] text-white w-28 py-1 rounded-md'>Login</button>
