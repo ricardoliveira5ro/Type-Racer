@@ -1,6 +1,7 @@
 import Header from "../../components/Header/Header";
 import Title from "./Title";
 import GameOptions from "./GameOptions";
+import HighScores from "./HighScores";
 
 function Home() {
     return (
@@ -8,6 +9,7 @@ function Home() {
             <Header />
             <Title />
             <GameOptions />
+            <HighScores />
         </div>
     );
 }
