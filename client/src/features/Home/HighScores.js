@@ -40,37 +40,27 @@ function HighScores() {
                             </button>
                         ))}
                     </div>
-                    <div className='flex flex-col gap-y-4 px-6 py-4'>
-                        <div className='grid grid-cols-6'>
-                            <div className='col-span-4'>
-                                <div className='flex items-center gap-x-8'>
-                                    <div className='w-5'>#</div>
-                                    <div>Name</div>
-                                </div>
-                            </div>
-                            <div className='col-span-2'>
-                                <div className='flex justify-around items-center gap-x-8'>
-                                    <div>Accuracy</div>
-                                    <div>WPM</div>
-                                </div>
-                            </div>
-                        </div>
-                        {dummyScores.map((element, index) => (
-                            <div className='grid grid-cols-6'>
-                                <div className='col-span-4'>
-                                    <div className='flex items-center gap-x-8'>
-                                        <div className='w-5'>{index + 1}</div>
-                                        <div>{element.name}</div>
-                                    </div>
-                                </div>
-                                <div className='col-span-2'>
-                                    <div className='flex justify-around items-center gap-x-8'>
-                                        <div>{element.accuracy}</div>
-                                        <div>{element.wpm}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
+                    <div className='pt-4'>
+                        <table className='high-score-table'>
+                            <thead>
+                                <tr>
+                                    <th className="number-col">#</th>
+                                    <th className="name-col">Name</th>
+                                    <th className="other-col">Accuracy</th>
+                                    <th className="other-col">WPM</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {dummyScores.map((score, index) => (
+                                    <tr key={index}>
+                                        <td className="number-col">{index + 1}</td>
+                                        <td className="name-col">{score.name}</td>
+                                        <td className="other-col">{score.accuracy}%</td>
+                                        <td className="other-col">{score.wpm}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
