@@ -10,6 +10,21 @@ function HighScores() {
         setActiveTab(tab);
     };
 
+    const dummyScores = [
+        { name: 'ricardo5', accuracy: 98, wpm: 153.82 },
+        { name: 'oliveira5', accuracy: 95, wpm: 152.64 },
+        { name: 'ricardo5', accuracy: 98, wpm: 151.82 },
+        { name: 'oliveira5', accuracy: 95, wpm: 150.64 },
+        { name: 'ricardo5', accuracy: 98, wpm: 149.82 },
+        { name: 'oliveira5', accuracy: 95, wpm: 148.64 },
+        { name: 'ricardo5', accuracy: 98, wpm: 147.82 },
+        { name: 'oliveira5', accuracy: 95, wpm: 146.64 },
+        { name: 'ricardo5', accuracy: 98, wpm: 147.82 },
+        { name: 'oliveira5', accuracy: 95, wpm: 146.64 },
+        { name: 'ricardo5', accuracy: 98, wpm: 147.82 },
+        { name: 'oliveira5', accuracy: 95, wpm: 146.64 }
+    ]
+
     return (
         <div className='mt-8'>
             <div className='flex justify-center items-center gap-x-3'>
@@ -25,7 +40,38 @@ function HighScores() {
                             </button>
                         ))}
                     </div>
-                    <div className='p-6'>Records</div>
+                    <div className='flex flex-col gap-y-4 px-6 py-4'>
+                        <div className='grid grid-cols-6'>
+                            <div className='col-span-4'>
+                                <div className='flex items-center gap-x-8'>
+                                    <div className='w-5'>#</div>
+                                    <div>Name</div>
+                                </div>
+                            </div>
+                            <div className='col-span-2'>
+                                <div className='flex justify-around items-center gap-x-8'>
+                                    <div>Accuracy</div>
+                                    <div>WPM</div>
+                                </div>
+                            </div>
+                        </div>
+                        {dummyScores.map((element, index) => (
+                            <div className='grid grid-cols-6'>
+                                <div className='col-span-4'>
+                                    <div className='flex items-center gap-x-8'>
+                                        <div className='w-5'>{index + 1}</div>
+                                        <div>{element.name}</div>
+                                    </div>
+                                </div>
+                                <div className='col-span-2'>
+                                    <div className='flex justify-around items-center gap-x-8'>
+                                        <div>{element.accuracy}</div>
+                                        <div>{element.wpm}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>
