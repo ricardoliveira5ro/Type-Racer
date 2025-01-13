@@ -52,6 +52,23 @@ userSchema.pre('save', async function (next) {
 // statics: Model functions
 // methods: Instance functions
 
+// Authenticate with credentials
+userSchema.statics.authenticate = async (email, password) => {
+    const user = await User.findOne({ email })
+
+    if (!user) {
+        throw new Error('Unable to login')
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password)
+
+    if (!isMatch) {
+        throw new Error('Unable to login')
+    }
+
+    return user
+}
+
 // Generate bearer token
 userSchema.methods.generateAuthToken = async function () {
     const user = this
@@ -63,6 +80,7 @@ userSchema.methods.generateAuthToken = async function () {
     return token
 }
 
+// Model custom JSON 
 userSchema.methods.toJSON = function () {
     const userObject = this.toObject()
 

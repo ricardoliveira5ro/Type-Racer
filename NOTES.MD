@@ -45,3 +45,8 @@ There are some options to get/generate the text that will be typed by the player
 - **Green**: <span style="background-color: #86C232; color: #86C232; padding: 2px 5px; border-radius: 3px;">#86C232</span> #86C232
 - **White**: <span style="background-color: #FFFFFF; color: white; padding: 2px 5px; border-radius: 3px;">#FFFFFF</span> #FFFFFF
 
+### Run local mongodb
+
+```
+/[path-to]/[folder]/mongodb/bin/mongod.exe --dbpath=/[path-to]/[folder]/mongodb-data
+```
