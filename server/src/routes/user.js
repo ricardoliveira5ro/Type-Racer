@@ -4,7 +4,7 @@ const router = new express.Router()
 const User = require('../models/user')
 
 // Sign Up
-router.post('/users/signup', async (req, res) => {
+router.post('/users/signup', async (req, res, next) => {
     const user = new User(req.body)
 
     try {
@@ -14,7 +14,7 @@ router.post('/users/signup', async (req, res) => {
         res.send({ user, token })
 
     } catch (e) {
-        res.status(401).send({ message: e.message })
+        next(e)
     }
 })
 

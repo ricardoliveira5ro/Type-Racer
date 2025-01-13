@@ -6,34 +6,35 @@ const validator = require('validator')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
+const AppError = require('../errors/Error')
+
 const userSchema = new mongoose.Schema({
     username: {
         type: String,
         unique: true,
-        require: true,
+        required: true,
         trim: true
     },
     email: {
         type: String,
         unique: true,
-        require: true,
+        required: true,
         trim: true,
-        validator(value) {
-            if (!validator.isEmail(value)) {
-                throw new Error('Email is invalid')
-            }
+        validate: {
+            validator: (value) => validator.isEmail(value),
+            message: 'Email is invalid'
         }
     },
     password: {
         type: String,
-        require: true,
+        required: true,
         minlength: 7,
         trim: true
     },
     tokens: [{
         token: {
             type: String,
-            require: true
+            required: true
         }
     }]
 }, {
@@ -57,13 +58,13 @@ userSchema.statics.authenticate = async (email, password) => {
     const user = await User.findOne({ email })
 
     if (!user) {
-        throw new Error('Unable to login')
+        throw new AppError('Unable to login', 401)
     }
 
     const isMatch = await bcrypt.compare(password, user.password)
 
     if (!isMatch) {
-        throw new Error('Unable to login')
+        throw new AppError('Unable to login', 401)
     }
 
     return user
