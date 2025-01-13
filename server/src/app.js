@@ -2,6 +2,8 @@ const path = require('path')
 const http = require('http')
 const express = require('express')
 
+const globalErrorHandler = require('./middleware/errorHandler')
+
 const userRoutes = require('./routes/user')
 
 require('./db/mongoose')
@@ -17,6 +19,9 @@ const server = http.createServer(app)
 
 // API routes
 app.use('/api', userRoutes);
+
+// Error Handler
+app.use(globalErrorHandler)
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '../../client/build')));

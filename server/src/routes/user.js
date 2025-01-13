@@ -14,12 +14,12 @@ router.post('/users/signup', async (req, res) => {
         res.send({ user, token })
 
     } catch (e) {
-        res.status(400).send(e)
+        res.status(401).send({ message: e.message })
     }
 })
 
 // Login
-router.post('/users/login', async (req, res) => {
+router.post('/users/login', async (req, res, next) => {
     try {
         const user = await User.authenticate(req.body.email, req.body.password)
         const token = await user.generateAuthToken()
@@ -27,7 +27,7 @@ router.post('/users/login', async (req, res) => {
         res.send({ user, token })
 
     } catch (e) {
-        res.status(400).send(e)
+        next(e)
     }
 })
 
