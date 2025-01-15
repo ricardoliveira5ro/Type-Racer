@@ -3,7 +3,7 @@ import { Wand, BookText, Gamepad2 } from 'lucide-react';
 function GameOptions() {
     return (
         <div>
-            <div className='flex justify-center'><img src={require('../../f1.webp')} alt='f1 icon' /></div>
+            <div className='flex justify-center'><img src={require('../../assets/images/f1.webp')} alt='f1 icon' /></div>
             <div className="grid grid-cols-2 gap-4 mt-8">
                 <div className="bg-[var(--grey)] rounded-md px-5 py-3">
                     <div className="flex items-center gap-x-2 mb-2">
