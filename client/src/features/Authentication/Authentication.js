@@ -3,7 +3,9 @@ import './Authentication.css'
 import React, { useEffect, useState } from 'react'
 import { Link } from "react-router-dom";
 import { MoveLeft } from 'lucide-react';
+
 import validator from 'validator';
+import axios from 'axios';
 
 function Authentication() {
 
@@ -16,7 +18,7 @@ function Authentication() {
         setEmail('')
         setPassword('')
     }
-    
+
     const validateRequiredField = (input, errorElement) => {
         if (!input.value.trim()) {
             input.classList.add("invalid-input");
@@ -61,11 +63,35 @@ function Authentication() {
         const isUsernameValid = validateRequiredField(usernameInput, usernameError);
         const isPasswordValid = validateRequiredField(passwordInput, passwordError);
         const isEmailValid = validateEmail(emailInput, emailError);
-        
-        if (isUsernameValid && isEmailValid && isPasswordValid) {
-            console.log('Form is valid');
 
-            // API endpoint
+        if (isUsernameValid && isEmailValid && isPasswordValid) {
+            const formData = {
+                username: username,
+                email: email,
+                password: password
+            }
+
+            axios.post("http://localhost:5000/api/users/signup", formData)
+                .then((response) => {
+                    // Feedback if success
+                })
+                .catch((error) => {
+                    if (error.response.status === 400 && error.response.data.message) {
+                        const errorMessage = error.response.data.message;
+
+                        if (errorMessage.endsWith('already exists')) {
+                            if (errorMessage.includes("'username'")) {
+                                usernameInput.classList.add("invalid-input");
+                                usernameError.textContent = 'Already taken';
+                            }
+    
+                            if (errorMessage.includes("'email'")) {
+                                emailInput.classList.add("invalid-input");
+                                emailError.textContent = 'Already taken';
+                            }
+                        }
+                    }
+                })
         }
     }
 
