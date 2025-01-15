@@ -28,7 +28,7 @@ function HighScores() {
     return (
         <div className='mt-8'>
             <div className='flex justify-center items-center gap-x-3'>
-                <img src={require('../../trophy.webp')} alt='Trophy icon' />
+                <img src={require('../../assets/images/trophy.webp')} alt='Trophy icon' />
                 <h3 className='text-2xl text-[#ffbc00]'>High Scores</h3>
             </div>
             <div className='flex justify-center items-center mt-8'>
