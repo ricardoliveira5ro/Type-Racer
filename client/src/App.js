@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import Home from "./features/Home/Home";
-import Authentication from "./features/Authentication/Authentication";
+import Authentication from "./pages/Authentication";
 
 function App() {
   return (
