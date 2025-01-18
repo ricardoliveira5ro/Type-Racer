@@ -1,7 +1,9 @@
+import './Home.css'
+
 import Header from "../../components/Header/Header";
-import Title from "./Title";
-import GameOptions from "./GameOptions";
-import HighScores from "./HighScores";
+import Title from "../../features/home/Title";
+import GameOptions from "../../features/home/GameOptions";
+import HighScores from "../../features/home/HighScores";
 
 function Home() {
     return (
