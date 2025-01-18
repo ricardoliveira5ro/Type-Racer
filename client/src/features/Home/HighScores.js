@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 
-import './Home.css'
-
 function HighScores() {
 
     const [activeTab, setActiveTab] = useState('Weekly');

@@ -6,12 +6,12 @@ import axios from 'axios';
 import { Link } from "react-router-dom";
 import { MoveLeft } from 'lucide-react';
 
-import { useAuthentication } from '../hooks/useAuthentication';
-import { validateField, validateEmail } from '../utils/validators';
+import { useAuthentication } from '../../hooks/useAuthentication';
+import { validateField, validateEmail } from '../../utils/validators';
 
-import SignUpForm from '../features/authentication/SignUpForm';
-import SignInForm from '../features/authentication/SignInForm';
-import Overlay from '../features/authentication/Overlay';
+import SignUpForm from '../../features/authentication/SignUpForm';
+import SignInForm from '../../features/authentication/SignInForm';
+import Overlay from '../../features/authentication/Overlay';
 
 const Authentication = () => {
     const { formData, errors, handleInputChange, clearInputs, setError } = useAuthentication();
