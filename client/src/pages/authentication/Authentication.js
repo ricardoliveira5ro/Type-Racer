@@ -1,6 +1,6 @@
 import './Authentication.css';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 
 import { Link } from "react-router-dom";
@@ -12,8 +12,12 @@ import { validateField, validateEmail } from '../../utils/validators';
 import SignUpForm from '../../features/authentication/SignUpForm';
 import SignInForm from '../../features/authentication/SignInForm';
 import Overlay from '../../features/authentication/Overlay';
+import AlertSuccess from '../../components/Alerts/AlertSuccess';
 
 const Authentication = () => {
+
+    const [showAlert, setShowAlert] = useState(false);
+
     const { formData, errors, handleInputChange, clearInputs, setError } = useAuthentication();
 
     const containerRef = useRef(null);
@@ -32,23 +36,25 @@ const Authentication = () => {
         setError('password', passwordValidation.error);
 
         if (usernameValidation.isValid && emailValidation.isValid && passwordValidation.isValid) {
-            axios.post("http://localhost:5000/api/users/signup", formData)
-                .then((response) => {
-                    console.log('User registered:', response.data);
-                })
-                .catch((error) => {
-                    if (error.response?.status === 400 && error.response.data.message) {
-                        const errorMessage = error.response.data.message;
-                        if (errorMessage.endsWith('already exists')) {
-                            if (errorMessage.includes("'username'")) {
-                                setError('username', 'Already taken');
-                            }
-                            if (errorMessage.includes("'email'")) {
-                                setError('email', 'Already taken');
-                            }
-                        }
-                    }
-                });
+            // axios.post("http://localhost:5000/api/users/signup", formData)
+            //     .then((response) => {
+            //         console.log('User registered:', response.data);
+            //     })
+            //     .catch((error) => {
+            //         if (error.response?.status === 400 && error.response.data.message) {
+            //             const errorMessage = error.response.data.message;
+            //             if (errorMessage.endsWith('already exists')) {
+            //                 if (errorMessage.includes("'username'")) {
+            //                     setError('username', 'Already taken');
+            //                 }
+            //                 if (errorMessage.includes("'email'")) {
+            //                     setError('email', 'Already taken');
+            //                 }
+            //             }
+            //         }
+            //     });
+
+            setShowAlert(true)
         }
     };
 
@@ -79,6 +85,7 @@ const Authentication = () => {
 
     return (
         <div className="flex flex-col justify-center items-center h-[100vh] px-8 py-5 gap-y-8">
+            {showAlert && <AlertSuccess onDismissAlert={() => setShowAlert(false)} />}
             <div className="container" id="container" ref={containerRef}>
                 <div className="form-container sign-up-container">
                     <SignUpForm
