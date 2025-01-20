@@ -45,6 +45,7 @@ const Authentication = () => {
                     setAlertType('SUCCESS')
                     setShowAlert(true)
 
+                    containerRef.current.classList.remove("right-panel-active");
                     clearInputs()
                 })
                 .catch((error) => {
