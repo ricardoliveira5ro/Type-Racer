@@ -1,7 +1,7 @@
 import React from 'react';
 
-const SignInForm = ({ formData, handleInputChange }) => (
-    <form>
+const SignInForm = ({ formData, errors, handleInputChange, onSubmit }) => (
+    <form onSubmit={onSubmit}>
         <h1>Sign in</h1>
         <div className="social-container">
             <a href="#" className="social">
@@ -15,16 +15,20 @@ const SignInForm = ({ formData, handleInputChange }) => (
             onChange={handleInputChange}
             type="email"
             placeholder="Email"
+            className={errors.email ? 'invalid-input' : ''}
         />
+        <span className="w-full text-left text-red-600">{errors.email}</span>
         <input
             name="password"
             value={formData.password}
             onChange={handleInputChange}
             type="password"
             placeholder="Password"
+            className={errors.password ? 'invalid-input' : ''}
         />
+        <span className="w-full text-left text-red-600">{errors.password}</span>
         <a href="#">Forgot your password?</a>
-        <button type="button">Log In</button>
+        <button type="submit">Log In</button>
     </form>
 );
 

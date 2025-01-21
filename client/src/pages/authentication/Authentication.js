@@ -3,7 +3,7 @@ import './Authentication.css';
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { MoveLeft } from 'lucide-react';
 
 import { useAuthentication } from '../../hooks/useAuthentication';
@@ -15,6 +15,8 @@ import Overlay from '../../features/authentication/Overlay';
 import Alert from '../../components/Alerts/Alert';
 
 const Authentication = () => {
+
+    const navigate = useNavigate();
 
     const [showAlert, setShowAlert] = useState(false);
     const [alertType, setAlertType] = useState('ERROR');
@@ -68,6 +70,33 @@ const Authentication = () => {
         }
     };
 
+    const onLoginSubmit = (e) => {
+        e.preventDefault();
+
+        const emailValidation = validateField(formData.email);
+        const passwordValidation = validateField(formData.password);
+
+        setError('email', emailValidation.error);
+        setError('password', passwordValidation.error);
+
+        if (emailValidation.isValid && passwordValidation.isValid) {
+            axios.post("http://localhost:5000/api/users/login", formData)
+                .then((response) => {
+                    console.log('Successfully logged in:', response.data);
+
+                    navigate('/home')
+                    clearInputs()
+                })
+                .catch((error) => {
+                    setAlertText('Unable to login')
+                    setAlertType('ERROR')
+                    setShowAlert(true)
+
+                    console.log(error)
+                });
+        }
+    };
+
     useEffect(() => {
         const signUpButton = signUpButtonRef.current;
         const signInButton = signInButtonRef.current;
@@ -110,7 +139,9 @@ const Authentication = () => {
                 <div className="form-container sign-in-container">
                     <SignInForm
                         formData={formData}
+                        errors={errors}
                         handleInputChange={handleInputChange}
+                        onSubmit={onLoginSubmit}
                     />
                 </div>
                 <Overlay
