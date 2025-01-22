@@ -137,8 +137,14 @@ const Authentication = () => {
                     />
                 </div>
                 <Overlay
-                    onSignUpClick={() => containerRef.current.classList.add("right-panel-active")}
-                    onSignInClick={() => containerRef.current.classList.remove("right-panel-active")}
+                    onSignUpClick={() => {
+                        clearInputs()
+                        containerRef.current.classList.add("right-panel-active")
+                    }}
+                    onSignInClick={() => {
+                        clearInputs()
+                        containerRef.current.classList.remove("right-panel-active")
+                    }}
                 />
             </div>
             <Link to={'/home'} className="flex gap-x-4">
