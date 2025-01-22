@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export const useAuthentication = () => {
+export const useFormAuthentication = () => {
     const [formData, setFormData] = useState({ username: '', email: '', password: '' });
     const [errors, setErrors] = useState({});
 

@@ -1,12 +1,13 @@
 import './Authentication.css';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import axios from 'axios';
 
 import { Link, useNavigate } from "react-router-dom";
 import { MoveLeft } from 'lucide-react';
 
-import { useAuthentication } from '../../hooks/useAuthentication';
+import { useFormAuthentication } from '../../hooks/useFormAuthentication';
+import { useAlert } from '../../hooks/useAlert';
 import { validateField, validateEmail } from '../../utils/validators';
 
 import SignUpForm from '../../features/authentication/SignUpForm';
@@ -18,11 +19,8 @@ const Authentication = () => {
 
     const navigate = useNavigate();
 
-    const [showAlert, setShowAlert] = useState(false);
-    const [alertType, setAlertType] = useState('ERROR');
-    const [alertText, setAlertText] = useState('Something went wrong!');
-
-    const { formData, errors, handleInputChange, clearInputs, setError } = useAuthentication();
+    const { formData, errors, handleInputChange, clearInputs, setError } = useFormAuthentication();
+    const { isActive, alertType, alertText, showAlert, dismissAlert } = useAlert()
 
     const containerRef = useRef(null);
     const signUpButtonRef = useRef(null);
@@ -43,9 +41,7 @@ const Authentication = () => {
             axios.post("http://localhost:5000/api/users/signup", formData)
                 .then((response) => {
                     console.log('User registered:', response.data);
-                    setAlertText('Your account has been created successfully')
-                    setAlertType('SUCCESS')
-                    setShowAlert(true)
+                    showAlert('SUCCESS', 'Your account has been created successfully')
 
                     containerRef.current.classList.remove("right-panel-active");
                     clearInputs()
@@ -60,9 +56,7 @@ const Authentication = () => {
                         }
 
                     } else {
-                        setAlertText('Something went wrong!')
-                        setAlertType('ERROR')
-                        setShowAlert(true)
+                        showAlert()
 
                         console.log(error)
                     }
@@ -88,9 +82,7 @@ const Authentication = () => {
                     clearInputs()
                 })
                 .catch((error) => {
-                    setAlertText('Unable to login')
-                    setAlertType('ERROR')
-                    setShowAlert(true)
+                    showAlert('ERROR', 'Unable to login')
 
                     console.log(error)
                 });
@@ -124,8 +116,8 @@ const Authentication = () => {
 
     return (
         <div className="flex flex-col justify-center items-center h-[100vh] px-8 py-5 gap-y-8">
-            {showAlert && 
-                <Alert text={alertText} type={alertType} onDismissAlert={() => setShowAlert(false)} />
+            {isActive && 
+                <Alert text={alertText} type={alertType} onDismissAlert={() => dismissAlert()} />
             }
             <div className="container" id="container" ref={containerRef}>
                 <div className="form-container sign-up-container">
