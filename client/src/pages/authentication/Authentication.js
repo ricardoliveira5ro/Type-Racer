@@ -1,19 +1,20 @@
 import './Authentication.css';
 
 import React, { useEffect, useRef } from 'react';
-import axios from 'axios';
-
 import { Link, useNavigate } from "react-router-dom";
-import { MoveLeft } from 'lucide-react';
+
+import { UsersAPI } from '../../api/usersAPI';
 
 import { useFormAuthentication } from '../../hooks/useFormAuthentication';
 import { useAlert } from '../../hooks/useAlert';
+
 import { validateField, validateEmail } from '../../utils/validators';
 
 import SignUpForm from '../../features/authentication/SignUpForm';
 import SignInForm from '../../features/authentication/SignInForm';
 import Overlay from '../../features/authentication/Overlay';
 import Alert from '../../components/Alerts/Alert';
+import { MoveLeft } from 'lucide-react';
 
 const Authentication = () => {
 
@@ -26,7 +27,7 @@ const Authentication = () => {
     const signUpButtonRef = useRef(null);
     const signInButtonRef = useRef(null);
 
-    const onSignUpSubmit = (e) => {
+    const onSignUpSubmit = async (e) => {
         e.preventDefault();
 
         const usernameValidation = validateField(formData.username);
@@ -38,33 +39,35 @@ const Authentication = () => {
         setError('password', passwordValidation.error);
 
         if (usernameValidation.isValid && emailValidation.isValid && passwordValidation.isValid) {
-            axios.post("http://localhost:5000/api/users/signup", formData)
-                .then((response) => {
-                    console.log('User registered:', response.data);
-                    showAlert('SUCCESS', 'Your account has been created successfully')
+            const { success, data, error } = await UsersAPI.signup(formData)
 
-                    containerRef.current.classList.remove("right-panel-active");
-                    clearInputs()
-                })
-                .catch((error) => {
-                    if (error.response?.status === 400 && error.response.data.message && error.response.data.message.endsWith('already exists')) {
-                        if (error.response.data.message.includes("'username'")) {
-                            setError('username', 'Already taken');
-                        }
-                        if (error.response.data.message.includes("'email'")) {
-                            setError('email', 'Already taken');
-                        }
+            if (success) {
+                console.log('User registered:', data);
+                showAlert('SUCCESS', 'Your account has been created successfully')
 
-                    } else {
-                        showAlert()
+                containerRef.current.classList.remove("right-panel-active");
+                clearInputs()
 
-                        console.log(error)
+            } else {
+                console.log(error)
+                if (error.response?.status === 400 && error.response.data.message && error.response.data.message.endsWith('already exists')) {
+                    if (error.response.data.message.includes("'username'")) {
+                        setError('username', 'Already taken');
                     }
-                });
+                    if (error.response.data.message.includes("'email'")) {
+                        setError('email', 'Already taken');
+                    }
+
+                } else {
+                    showAlert()
+
+                    console.log(error)
+                }
+            }
         }
     };
 
-    const onLoginSubmit = (e) => {
+    const onLoginSubmit = async (e) => {
         e.preventDefault();
 
         const emailValidation = validateField(formData.email);
@@ -74,18 +77,18 @@ const Authentication = () => {
         setError('password', passwordValidation.error);
 
         if (emailValidation.isValid && passwordValidation.isValid) {
-            axios.post("http://localhost:5000/api/users/login", formData)
-                .then((response) => {
-                    console.log('Successfully logged in:', response.data);
+            const { success, data, error } = await UsersAPI.login(formData)
 
-                    navigate('/home')
-                    clearInputs()
-                })
-                .catch((error) => {
-                    showAlert('ERROR', 'Unable to login')
+            if (success) {
+                console.log('Successfully logged in:', data);
 
-                    console.log(error)
-                });
+                navigate('/home')
+                clearInputs()
+
+            } else {
+                showAlert('ERROR', 'Unable to login')
+                console.log(error)
+            }
         }
     };
 
@@ -116,7 +119,7 @@ const Authentication = () => {
 
     return (
         <div className="flex flex-col justify-center items-center h-[100vh] px-8 py-5 gap-y-8">
-            {isActive && 
+            {isActive &&
                 <Alert text={alertText} type={alertType} onDismissAlert={() => dismissAlert()} />
             }
             <div className="container" id="container" ref={containerRef}>
