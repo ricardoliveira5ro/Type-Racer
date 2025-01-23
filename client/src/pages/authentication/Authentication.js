@@ -1,12 +1,11 @@
 import './Authentication.css';
 
 import React, { useEffect, useRef } from 'react';
-import { Link, useNavigate } from "react-router-dom";
-
-import { UsersAPI } from '../../api/usersAPI';
+import { Link } from "react-router-dom";
 
 import { useFormAuthentication } from '../../hooks/useFormAuthentication';
 import { useAlert } from '../../hooks/useAlert';
+import { useAPIHandler } from '../../hooks/useAPIHandler';
 
 import { validateField, validateEmail } from '../../utils/validators';
 
@@ -18,10 +17,9 @@ import { MoveLeft } from 'lucide-react';
 
 const Authentication = () => {
 
-    const navigate = useNavigate();
-
     const { formData, errors, handleInputChange, clearInputs, setError } = useFormAuthentication();
-    const { isActive, alertType, alertText, showAlert, dismissAlert } = useAlert()
+    const { isActive, alertType, alertText, showAlert, dismissAlert } = useAlert();
+    const { handleLoginSubmit, handleSignupSubmit } = useAPIHandler();
 
     const containerRef = useRef(null);
     const signUpButtonRef = useRef(null);
@@ -39,31 +37,7 @@ const Authentication = () => {
         setError('password', passwordValidation.error);
 
         if (usernameValidation.isValid && emailValidation.isValid && passwordValidation.isValid) {
-            const { success, data, error } = await UsersAPI.signup(formData)
-
-            if (success) {
-                console.log('User registered:', data);
-                showAlert('SUCCESS', 'Your account has been created successfully')
-
-                containerRef.current.classList.remove("right-panel-active");
-                clearInputs()
-
-            } else {
-                console.log(error)
-                if (error.response?.status === 400 && error.response.data.message && error.response.data.message.endsWith('already exists')) {
-                    if (error.response.data.message.includes("'username'")) {
-                        setError('username', 'Already taken');
-                    }
-                    if (error.response.data.message.includes("'email'")) {
-                        setError('email', 'Already taken');
-                    }
-
-                } else {
-                    showAlert()
-
-                    console.log(error)
-                }
-            }
+            handleSignupSubmit(formData, clearInputs, showAlert, containerRef, setError)
         }
     };
 
@@ -77,18 +51,7 @@ const Authentication = () => {
         setError('password', passwordValidation.error);
 
         if (emailValidation.isValid && passwordValidation.isValid) {
-            const { success, data, error } = await UsersAPI.login(formData)
-
-            if (success) {
-                console.log('Successfully logged in:', data);
-
-                navigate('/home')
-                clearInputs()
-
-            } else {
-                showAlert('ERROR', 'Unable to login')
-                console.log(error)
-            }
+            handleLoginSubmit(formData, clearInputs, showAlert)
         }
     };
 
