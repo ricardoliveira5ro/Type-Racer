@@ -29,7 +29,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         minlength: 7,
-        trim: true
+        trim: true,
+        validate: {
+            validator: (value) => validator.isStrongPassword(value, { minLength: 7, minUppercase: 1, minSymbols: 1 }),
+            message: 'Password is invalid'
+        }
     },
     tokens: [{
         token: {

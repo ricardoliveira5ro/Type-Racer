@@ -7,7 +7,7 @@ import { useFormAuthentication } from '../../hooks/useFormAuthentication';
 import { useAlert } from '../../hooks/useAlert';
 import { useAPIHandler } from '../../hooks/useAPIHandler';
 
-import { validateField, validateEmail } from '../../utils/validators';
+import { validateField, validateEmail, validatePassword } from '../../utils/validators';
 
 import SignUpForm from '../../features/authentication/SignUpForm';
 import SignInForm from '../../features/authentication/SignInForm';
@@ -30,7 +30,7 @@ const Authentication = () => {
 
         const usernameValidation = validateField(formData.username);
         const emailValidation = validateEmail(formData.email);
-        const passwordValidation = validateField(formData.password);
+        const passwordValidation = validatePassword(formData.password);
 
         setError('username', usernameValidation.error);
         setError('email', emailValidation.error);
