@@ -18,8 +18,8 @@ export const validateEmail = (value) => {
 export const validatePassword = (value) => {
     if (!value.trim()) 
         return { error: 'Required field', isValid: false };
-    if (!validator.isStrongPassword(value, { minLength: 7, minUppercase: 1, minSymbols: 1 })) 
-        return { error: 'Requirements: Min length 7, 1 uppercase letter, 1 number', isValid: false };
+    if (!validator.isStrongPassword(value, { minLength: 7, minNumbers: 0, minLowercase: 0, minUppercase: 1, minSymbols: 1 })) 
+        return { error: 'Requirements: 7 characters, 1 uppercase letter, 1 special', isValid: false };
 
     return { error: '', isValid: true };
 }

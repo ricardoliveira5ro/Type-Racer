@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema({
         minlength: 7,
         trim: true,
         validate: {
-            validator: (value) => validator.isStrongPassword(value, { minLength: 7, minUppercase: 1, minSymbols: 1 }),
+            validator: (value) => validator.isStrongPassword(value, { minLength: 7, minNumbers: 0, minLowercase: 0, minUppercase: 1, minSymbols: 1 }),
             message: 'Password is invalid'
         }
     },
