@@ -1,0 +1,11 @@
+@media (max-width: 1750px) {
+    .alert-container {
+        @apply w-1/2
+    }
+}
+
+@media (max-width: 975px) {
+    .alert-container {
+        @apply w-full
+    }
+}

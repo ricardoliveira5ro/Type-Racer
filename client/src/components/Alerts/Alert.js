@@ -1,3 +1,4 @@
+import './Alert.css'
 import { ThumbsUp, CircleX, OctagonAlert, TriangleAlert } from 'lucide-react';
 
 function Alert({ text, type, onDismissAlert }) {
@@ -9,7 +10,7 @@ function Alert({ text, type, onDismissAlert }) {
     }
 
     return (
-        <div className={`flex w-1/4 justify-between items-center gap-x-2 px-6 py-4 mx-2 my-4 rounded-md text-sm bg-green-200
+        <div className={`alert-container flex w-1/4 justify-between items-center gap-x-2 px-6 py-4 mx-2 my-4 rounded-md text-sm bg-green-200
                         ${type === 'SUCCESS' ? 'bg-green-200 text-green-800' :
                             type === 'WARNING' ? 'bg-orange-200 text-yellow-800' :
                                 'bg-red-200 text-red-800'}`}
