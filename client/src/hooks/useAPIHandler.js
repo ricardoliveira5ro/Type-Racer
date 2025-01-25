@@ -10,10 +10,11 @@ export const useAPIHandler = () => {
         const { success, data } = await UsersAPI.login(formData);
 
         if (success) {
+            sessionStorage.setItem("type-racer-user-session-token", data.token)
+
             navigate('/home')
             clearInputs()
 
-            // data -> user session token
             return;
         }
 
