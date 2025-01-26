@@ -1,15 +1,18 @@
 import { useNavigate } from "react-router-dom";
 
 import { UsersAPI } from "../api/usersAPI";
+import { useAuth } from "../contexts/AuthContext";
 
 export const useAPIHandler = () => {
 
     const navigate = useNavigate()
+    const { authenticate } = useAuth()
 
     const handleLoginSubmit = async (formData, clearInputs, showAlert) => {
         const { success, data } = await UsersAPI.login(formData);
 
         if (success) {
+            authenticate()
             sessionStorage.setItem("type-racer-user-session-token", data.token)
 
             navigate('/home')
