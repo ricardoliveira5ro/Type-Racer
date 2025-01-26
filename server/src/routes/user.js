@@ -10,8 +10,7 @@ router.post('/users/signup', async (req, res, next) => {
     try {
         await user.save()
 
-        const token = await user.generateAuthToken()
-        res.send({ user, token })
+        res.send({ user })
 
     } catch (e) {
         next(e)
@@ -24,7 +23,19 @@ router.post('/users/login', async (req, res, next) => {
         const user = await User.authenticate(req.body.email, req.body.password)
         const token = await user.generateAuthToken()
 
-        res.send({ user, token })
+        const [header, payload, signature] = token.split('.')
+
+        res.cookie('type-racer-header-payload', `${header}.${payload}`, {
+            httpOnly: false,
+            secure: false, // For localhost should be false
+            sameSite: 'Strict'
+        })
+        res.cookie('type-racer-signature', `${signature}`, {
+            httpOnly: true,
+            secure: false, // For localhost should be false
+            sameSite: 'Strict'
+        })
+        res.send({ user })
 
     } catch (e) {
         next(e)

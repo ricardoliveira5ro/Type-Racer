@@ -1,5 +1,6 @@
 const path = require('path')
 const http = require('http')
+const cookieParser = require('cookie-parser');
 const express = require('express')
 
 const globalErrorHandler = require('./middleware/errorHandler')
@@ -12,6 +13,7 @@ const app = express()
 
 const cors = require('cors');
 
+app.use(cookieParser())
 app.use(cors());
 app.use(express.json());
 
