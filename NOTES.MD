@@ -2,6 +2,15 @@
 
 This file may contain outdated and not implemented ideas, it just serves the purpose to expose some pre planning and technical considerations
 
+### Cookies
+
+- Secure: 
+    - true -> for production
+    - false -> for localhost
+- SameSite: 
+    - 'Lax' -> using react local server :5000, allowing cross-origin requests
+    - 'Strict' -> using node server with react build, same origin
+
 ### Folder Structure
 
 Client (Frontend) - React.js
