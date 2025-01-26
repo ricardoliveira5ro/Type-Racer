@@ -1,31 +1,16 @@
 import React, { createContext, useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { UsersAPI } from "../api/usersAPI";
 
 const AuthContext = createContext(undefined);
 
 export const AuthProvider = ({ children }) => {
-  
-    const navigate = useNavigate();
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(() => {
+        return !!sessionStorage.getItem("type-racer-user-session-token")
+    });
 
-    const login = async (email, password) => {
-        // Reset value
-        sessionStorage.removeItem("type-racer-user-session-token");
-
-        const { success, data } = await UsersAPI.login({ username: '', email: email, password: password });
-
-        if (success) {
-            sessionStorage.setItem("type-racer-user-session-token", data.token)
-            setIsAuthenticated(true);
-            navigate('/home')
-
-            return
-        }
-    }
+    const authenticate = () => setIsAuthenticated(true);
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, login }}>
+        <AuthContext.Provider value={{ isAuthenticated, authenticate }}>
             {children}
         </AuthContext.Provider>
     );
