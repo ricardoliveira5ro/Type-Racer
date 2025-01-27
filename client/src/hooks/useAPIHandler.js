@@ -9,13 +9,12 @@ export const useAPIHandler = () => {
     const { authenticate } = useAuth()
 
     const handleLoginSubmit = async (formData, clearInputs, showAlert) => {
-        const { success, data } = await UsersAPI.login(formData);
+        const { success } = await UsersAPI.login(formData);
 
         if (success) {
             authenticate()
-            sessionStorage.setItem("type-racer-user-session-token", data.token)
 
-            navigate('/home')
+            navigate('/profile')
             clearInputs()
 
             return;
