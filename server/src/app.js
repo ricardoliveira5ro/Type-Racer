@@ -20,7 +20,7 @@ app.use(express.json());
 const server = http.createServer(app)
 
 // API routes
-app.use('/api', userRoutes);
+app.use('/api/users', userRoutes);
 
 // Error Handler
 app.use(globalErrorHandler)

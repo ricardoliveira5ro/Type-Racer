@@ -10,8 +10,6 @@ const jwtMiddleware = (req, res, next) => {
 
     const token = `${headerPayload}.${signature}`
 
-    // Verify token
-
     req.headers.authorization = `Bearer ${token}`
     next()
 }

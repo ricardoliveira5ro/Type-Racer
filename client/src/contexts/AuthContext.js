@@ -1,30 +1,28 @@
-import React, { createContext, useContext, useState } from "react";
-import Cookies from "js-cookie";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { UsersAPI } from "../api/usersAPI";
 
 const AuthContext = createContext(undefined);
 
 export const AuthProvider = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(() => {
-        return !!Cookies.get("type-racer-header-payload")
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-        // Implement token verification endpoint
-        // Token could be expired or invalid
-    });
+    useEffect(() => {
+        const verifyToken = async () => {
+            try {
+                const { success } = await UsersAPI.verifyToken();
+                setIsAuthenticated(success);
+            } catch (error) {
+                setIsAuthenticated(false);
+            }
+        };
+
+        verifyToken();
+    }, []);
 
     const authenticate = () => setIsAuthenticated(true);
 
-    const logout = () => {
-        // Cookies.remove("type-racer-header-payload")
-        // Cookies.remove("type-racer-signature")
-
-        // Should call logout API endpoint
-        // Remove cookies from the backend side
-
-        setIsAuthenticated(false)
-    }
-
     return (
-        <AuthContext.Provider value={{ isAuthenticated, authenticate, logout }}>
+        <AuthContext.Provider value={{ isAuthenticated, authenticate }}>
             {children}
         </AuthContext.Provider>
     );

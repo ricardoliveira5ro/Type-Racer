@@ -31,6 +31,21 @@ export const UsersAPI = {
         } catch (error) {
             return { success: false, error }
         }
+    },
+
+    verifyToken: async (cancel = false) => {
+        try {
+            const response = await api.request({
+                url: '/users/token',
+                method: 'GET',
+                signal: cancel ? cancelApiObject[this.verifyToken.name].handleRequestCancellation().signal : undefined
+            })
+
+            return { success: true, data: response.data }
+
+        } catch (error) {
+            return { success: false, error }
+        }
     }
 }
 

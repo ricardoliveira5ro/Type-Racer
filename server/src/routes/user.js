@@ -1,10 +1,13 @@
 const express = require('express')
 const router = new express.Router()
 
+const jwtMiddleware = require('../middleware/jwt')
+const auth = require('../middleware/auth')
+
 const User = require('../models/user')
 
 // Sign Up
-router.post('/users/signup', async (req, res, next) => {
+router.post('/signup', async (req, res, next) => {
     const user = new User(req.body)
 
     try {
@@ -18,7 +21,7 @@ router.post('/users/signup', async (req, res, next) => {
 })
 
 // Login
-router.post('/users/login', async (req, res, next) => {
+router.post('/login', async (req, res, next) => {
     try {
         const user = await User.authenticate(req.body.email, req.body.password)
         const token = await user.generateAuthToken()
@@ -40,6 +43,12 @@ router.post('/users/login', async (req, res, next) => {
     } catch (e) {
         next(e)
     }
+})
+
+// Verify token authenticity 
+router.get('/token', [jwtMiddleware, auth], async (req, res, next) => {
+    res.send({ user: req.user })
+    next()
 })
 
 module.exports = router
