@@ -7,17 +7,21 @@ const globalErrorHandler = require('./middleware/errorHandler')
 
 const userRoutes = require('./routes/user')
 
+require("dotenv").config({ path: path.resolve(__dirname, './config/.env.dev') });
 require('./db/mongoose')
 
 const app = express()
 
 const cors = require('cors');
 
+if (process.env.NODE_ENV === "development") {
+    app.use(cors({
+        origin: 'http://localhost:3000',
+        credentials: true
+    }));
+}
+
 app.use(cookieParser())
-app.use(cors({
-    origin: 'http://localhost:3000',
-    credentials: true
-}));
 app.use(express.json());
 
 const server = http.createServer(app)
