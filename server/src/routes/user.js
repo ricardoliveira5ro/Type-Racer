@@ -1,3 +1,6 @@
+const path = require('path')
+require("dotenv").config({ path: path.resolve(__dirname, '../config/.env.dev') });
+
 const express = require('express')
 const router = new express.Router()
 
@@ -28,15 +31,16 @@ router.post('/login', async (req, res, next) => {
 
         const [header, payload, signature] = token.split('.')
 
+        const isProduction = process.env.NODE_ENV === "production"
         res.cookie('type-racer-header-payload', `${header}.${payload}`, {
             httpOnly: false,
-            secure: false, // For localhost should be false
-            sameSite: 'Lax' // For localhost should be 'Lax' (different domain) / Strict
+            secure: isProduction ? true : false,
+            sameSite: isProduction ? 'Strict' : 'Lax'
         })
         res.cookie('type-racer-signature', `${signature}`, {
             httpOnly: true,
-            secure: false, // For localhost should be false
-            sameSite: 'Lax' // For localhost should be 'Lax' (different domain) / Strict
+            secure: isProduction ? true : false,
+            sameSite: isProduction ? 'Strict' : 'Lax'
         })
         res.send({ user })
 
