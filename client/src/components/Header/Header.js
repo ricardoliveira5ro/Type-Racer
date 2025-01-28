@@ -1,13 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
 import { UserRound } from 'lucide-react';
-import { useAuth } from "../../contexts/AuthContext";
 
 import './Header.css'
 
 function Header() {
 
     const navigate = useNavigate()
-    //const { logout } = useAuth();
 
     return (
         <div className='flex justify-between items-center bg-white rounded-md px-5 py-3'>

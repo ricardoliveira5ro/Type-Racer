@@ -31,12 +31,12 @@ router.post('/login', async (req, res, next) => {
         res.cookie('type-racer-header-payload', `${header}.${payload}`, {
             httpOnly: false,
             secure: false, // For localhost should be false
-            sameSite: 'Strict'
+            sameSite: 'Lax' // For localhost should be 'Lax' (different domain) / Strict
         })
         res.cookie('type-racer-signature', `${signature}`, {
             httpOnly: true,
             secure: false, // For localhost should be false
-            sameSite: 'Strict'
+            sameSite: 'Lax' // For localhost should be 'Lax' (different domain) / Strict
         })
         res.send({ user })
 

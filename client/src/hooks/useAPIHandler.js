@@ -1,19 +1,14 @@
 import { useNavigate } from "react-router-dom";
-
 import { UsersAPI } from "../api/usersAPI";
-import { useAuth } from "../contexts/AuthContext";
 
 export const useAPIHandler = () => {
 
     const navigate = useNavigate()
-    const { authenticate } = useAuth()
 
     const handleLoginSubmit = async (formData, clearInputs, showAlert) => {
         const { success } = await UsersAPI.login(formData);
 
         if (success) {
-            authenticate()
-
             navigate('/profile')
             clearInputs()
 
