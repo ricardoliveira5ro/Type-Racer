@@ -1,5 +1,4 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import { AuthProvider } from "./contexts/AuthContext";
 import { ProtectedRoute } from "./components/ProtectedRoute/ProtectedRoute";
 
 import Home from "./pages/home/Home";
@@ -14,19 +13,17 @@ function App() {
 
   return (
     <div>
-      <AuthProvider>
-        <Routes>
-          {/* Public routes */}
-          <Route path='/' element={<Navigate to='/home' replace />} />
-          <Route path='/home' element={<Home />} />
-          <Route path='/auth' element={<Authentication />} />
+      <Routes>
+        {/* Public routes */}
+        <Route path='/' element={<Navigate to='/home' replace />} />
+        <Route path='/home' element={<Home />} />
+        <Route path='/auth' element={<Authentication />} />
 
-          {/* Protected routes */}
-          <Route path='/' element={<ProtectedRoute />}>
-            <Route path='/profile' element={<Profile />} />
-          </Route>
-        </Routes>
-      </AuthProvider>
+        {/* Protected routes */}
+        <Route path='/' element={<ProtectedRoute />}>
+          <Route path='/profile' element={<Profile />} />
+        </Route>
+      </Routes>
     </div>
   );
 }

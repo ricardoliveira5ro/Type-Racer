@@ -1,9 +1,27 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
+import { useEffect, useState } from "react";
+
+import { UsersAPI } from "../../api/usersAPI";
 
 export const ProtectedRoute = () => {
+    const [isAuthorized, setIsAuthorized] = useState();
 
-    const { isAuthenticated } = useAuth();
+    useEffect(() => {
+        const verifyToken = async () => {
+            try {
+                const { success } = await UsersAPI.verifyToken();
+                setIsAuthorized(success);
+            } catch (error) {
+                setIsAuthorized(false);
+            }
+        };
 
-    return isAuthenticated ? <Outlet /> : <Navigate to={"/auth"} replace />
+        verifyToken();
+    }, []);
+
+    if (isAuthorized === undefined) {
+        return null;
+    }
+
+    return isAuthorized ? <Outlet /> : <Navigate to={"/auth"} replace />
 };
