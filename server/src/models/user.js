@@ -6,7 +6,8 @@ const validator = require('validator')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
-const AppError = require('../errors/Error')
+const UserStats = require('./userStats');
+const AppError = require('../errors/Error');
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -43,6 +44,21 @@ const userSchema = new mongoose.Schema({
     }]
 }, {
     timestamps: true
+})
+
+// Bind relationship w/ UserStats
+userSchema.virtual('stats', {
+    ref: 'UserStats',
+    localField: '_id',
+    foreignField: 'user'
+})
+
+// Delete UserStats when deleting User
+userSchema.pre('remove', async function (next) {
+    const user = this
+    await UserStats.deleteOne({ user: user._id })
+
+    next()
 })
 
 // Encode password before saving
