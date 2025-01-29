@@ -55,7 +55,7 @@ router.get('/token', [jwtMiddleware, authMiddleware], async (req, res, next) => 
     next()
 })
 
-router.get('/logout', [jwtMiddleware, authMiddleware], async (req, res, next) => {
+router.post('/logout', [jwtMiddleware, authMiddleware], async (req, res, next) => {
     try {
         const token = req.header('Authorization').replace('Bearer ', '')
         req.user.tokens = req.user.tokens.filter((t) => {

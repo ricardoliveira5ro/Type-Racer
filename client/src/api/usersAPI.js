@@ -46,6 +46,21 @@ export const UsersAPI = {
         } catch (error) {
             return { success: false, error }
         }
+    },
+
+    logout: async (cancel = false) => {
+        try {
+            await api.request({
+                url: '/users/logout',
+                method: 'POST',
+                signal: cancel ? cancelApiObject[this.verifyToken.name].handleRequestCancellation().signal : undefined
+            })
+
+            return { success: true }
+            
+        } catch (error) {
+            return { success: false, error }
+        }
     }
 }
 
