@@ -59,3 +59,35 @@ There are some options to get/generate the text that will be typed by the player
 ```
 /[path-to]/[folder]/mongodb/bin/mongod.exe --dbpath=/[path-to]/[folder]/mongodb-data
 ```
+
+### Auto boot terminals
+
+1. Install Restore Terminals extension (EthanSK.restore-terminals)
+2. Settings -> Extensions -> Restore Terminals Config -> Terminals (edit settings.json)
+3. 
+```
+"restoreTerminals.terminals": [
+    {
+        "splitTerminals": [{
+            "name": "server",
+            "commands": [
+                "cd server",
+                "npm run dev"
+            ]
+        }]
+    },
+    {
+        "splitTerminals": [{
+            "name": "client",
+            "commands": [
+                "cd client",
+                "npm start"
+            ]
+        }]
+    },
+]
+```
+4. (Optional) Not sync this as profile setting
+```
+"settingsSync.ignoredSettings": ["restoreTerminals.terminals"]
+```
