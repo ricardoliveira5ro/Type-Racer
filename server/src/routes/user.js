@@ -54,10 +54,14 @@ router.post('/login', async (req, res, next) => {
 
 // Verify token authenticity 
 router.get('/token', [jwtMiddleware, authMiddleware], async (req, res, next) => {
-    res.send({ user: req.user })
-    next()
+    try {
+        res.send({ user: req.user })
+    } catch (e) {
+        next(e)
+    }
 })
 
+// Logout
 router.post('/logout', [jwtMiddleware, authMiddleware], async (req, res, next) => {
     try {
         const token = req.header('Authorization').replace('Bearer ', '')
