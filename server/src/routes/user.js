@@ -7,14 +7,17 @@ const router = new express.Router()
 const jwtMiddleware = require('../middleware/jwt')
 const authMiddleware = require('../middleware/auth')
 
-const User = require('../models/user')
+const User = require('../models/user');
+const UserStats = require('../models/userStats');
 
 // Sign Up
 router.post('/signup', async (req, res, next) => {
     const user = new User(req.body)
+    const userStats = new UserStats({ user: user._id })
 
     try {
         await user.save()
+        await userStats.save()
 
         res.send({ user })
 
