@@ -25,7 +25,7 @@ function Header() {
     }, [])
 
     return (
-        <div className='flex justify-between items-center bg-white rounded-md px-5 py-3'>
+        <div className='flex justify-between items-center bg-white rounded-md px-5 py-3 w-full'>
             <Link to={'/home'} className='text-xl brand-title'>Type Racer</Link>
             <div className='flex items-center gap-x-5'>
                 {isAuthenticated ?
