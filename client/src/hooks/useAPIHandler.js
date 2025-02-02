@@ -44,5 +44,25 @@ export const useAPIHandler = () => {
         }
     }
 
-    return { handleLoginSubmit, handleSignupSubmit }
+    const handleLogout = async (showAlert) => {
+        const { success } = await UsersAPI.logout()
+
+        if (success) {
+            navigate('/home')
+            return
+        }
+        
+        showAlert('ERROR', 'Unable to logout')
+    }
+
+    const handlePasswordChange = async (oldPassword, newPassword, showAlert) => {
+        // To be implemented
+        const success = true
+
+        if (success) {
+            showAlert('SUCCESS', 'Password changed successfully')
+        }
+    }
+
+    return { handleLoginSubmit, handleSignupSubmit, handleLogout, handlePasswordChange }
 }
