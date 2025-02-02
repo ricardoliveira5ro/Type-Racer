@@ -1,4 +1,11 @@
 .display-email {
-    color: black;
-    font-weight: 300 !important;
+    @apply text-black !font-light
+}
+
+.profile-stats {
+    @apply flex gap-x-4
+}
+
+.profile-stats > li {
+    @apply bg-[var(--green)] px-3 py-0.5 rounded-sm text-white !font-light
 }

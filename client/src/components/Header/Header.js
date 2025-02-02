@@ -29,7 +29,7 @@ function Header() {
             <Link to={'/home'} className='text-xl brand-title'>Type Racer</Link>
             <div className='flex items-center gap-x-5'>
                 {isAuthenticated ?
-                    <a onClick={() => navigate('/profile')}><UserRound size={28} /></a> 
+                    <Link to={'/profile'}><UserRound size={28} /></Link> 
                     :
                     <>
                         <button onClick={() => navigate('/auth')} className='bg-[var(--green)] w-28 py-1 rounded-md'>Sign In</button>
