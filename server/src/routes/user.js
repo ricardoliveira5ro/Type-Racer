@@ -81,4 +81,17 @@ router.post('/logout', [jwtMiddleware, authMiddleware], async (req, res, next) =
     }
 })
 
+// Profile
+router.get('/profile', [jwtMiddleware, authMiddleware], async (req, res, next) => {
+    try {
+        const stats = await UserStats.find({ user: req.user._id })
+        req.user.stats = stats
+
+        res.send({ user: req.user })
+
+    } catch (e) {
+        next(e)
+    }
+})
+
 module.exports = router
