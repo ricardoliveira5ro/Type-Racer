@@ -53,10 +53,25 @@ export const UsersAPI = {
             await api.request({
                 url: '/users/logout',
                 method: 'POST',
-                signal: cancel ? cancelApiObject[this.verifyToken.name].handleRequestCancellation().signal : undefined
+                signal: cancel ? cancelApiObject[this.logout.name].handleRequestCancellation().signal : undefined
             })
 
             return { success: true }
+            
+        } catch (error) {
+            return { success: false, error }
+        }
+    },
+
+    profile: async (cancel = false) => {
+        try {
+            const response = await api.request({
+                url: '/users/profile',
+                method: 'GET',
+                signal: cancel ? cancelApiObject[this.profile.name].handleRequestCancellation().signal : undefined
+            })
+
+            return { success: true, data: response.data }
             
         } catch (error) {
             return { success: false, error }

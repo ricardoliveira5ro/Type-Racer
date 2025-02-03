@@ -84,10 +84,11 @@ router.post('/logout', [jwtMiddleware, authMiddleware], async (req, res, next) =
 // Profile
 router.get('/profile', [jwtMiddleware, authMiddleware], async (req, res, next) => {
     try {
-        const stats = await UserStats.find({ user: req.user._id })
-        req.user.stats = stats
+        const user = req.user.toObject()
+        const stats = await UserStats.findOne({ user: user._id })
+        user.stats = stats
 
-        res.send({ user: req.user })
+        res.send({ user: user })
 
     } catch (e) {
         next(e)
