@@ -1,6 +1,6 @@
 import './Profile.css'
 
-function ProfileInfo() {
+function ProfileInfo({ userInfo }) {
 
     return (
         <div className="flex flex-col justify-around items-center bg-white rounded-md p-7 w-fit gap-y-5">
@@ -8,31 +8,31 @@ function ProfileInfo() {
                 <div className='flex items-center gap-x-6'>
                     <img src={require('../../assets/images/profile-helmet.webp')} alt='Avatar icon' />
                     <div className='flex flex-col'>
-                        <span>ricardo5ro</span>
-                        <span className='text-[var(--green)]'>Email: <span className='display-email'>ricardo@gmail.com</span></span>
+                        <span>{userInfo.username}</span>
+                        <span className='text-[var(--green)]'>Email: <span className='display-email'>{userInfo.email}</span></span>
                     </div>
                 </div>
-                <span className='text-3xl'>143.2 WPM</span>
+                <span className='text-3xl'>{userInfo.wpm}</span>
             </div>
             <div className="flex flex-col">
                 <ul className="profile-stats">
-                    <li>Races: 12</li>
-                    <li>Wins: 7</li>
-                    <li>Accuracy: 97%</li>
+                    <li>Races: {userInfo.races}</li>
+                    <li>Wins: {userInfo.wins}</li>
+                    <li>Accuracy: {userInfo.accuracy}%</li>
                 </ul>
                 <div className='flex gap-x-4 mt-3'>
                     <div>
                         <p>Last 10 races</p>
                         <ul className="profile-stats">
-                            <li>WPM: 156.7</li>
-                            <li>Accuracy: 96%</li>
+                            <li>WPM: {userInfo.wpmLast10Races}</li>
+                            <li>Accuracy: {userInfo.accuracyLast10Races}%</li>
                         </ul>
                     </div>
                     <div>
                         <p>Best & Last</p>
                         <ul className="profile-stats">
-                            <li>WPM: 159.7</li>
-                            <li>WPM: 143.2</li>
+                            <li>WPM: {userInfo.bestRaceWPM}</li>
+                            <li>WPM: {userInfo.lastRaceWPM}</li>
                         </ul>
                     </div>
                 </div>

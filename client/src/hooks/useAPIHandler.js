@@ -64,13 +64,5 @@ export const useAPIHandler = () => {
         }
     }
 
-    const handleFetchUserInfo = async (userInfo) => {
-        const { success, data } = await UsersAPI.profile()
-
-        if (success) {
-            console.log(data)
-        }
-    }
-
-    return { handleLoginSubmit, handleSignupSubmit, handleLogout, handlePasswordChange, handleFetchUserInfo }
+    return { handleLoginSubmit, handleSignupSubmit, handleLogout, handlePasswordChange }
 }
