@@ -4,24 +4,16 @@ import ProfileActions from "../../features/profile/ProfileActions";
 import ProfileInfo from "../../features/profile/ProfileInfo";
 
 import { useAlert } from '../../hooks/useAlert';
-import { useAPIHandler } from '../../hooks/useAPIHandler'
+import { useLogout } from "../../hooks/useLogout";
+import { usePasswordChange } from "../../hooks/usePasswordChange";
 import { useUserProfile } from "../../hooks/useUserProfile";
 
 const Profile = () => {
 
     const { isActive, alertType, alertText, showAlert, dismissAlert } = useAlert()
-    const { handleLogout, handlePasswordChange } = useAPIHandler()
+    const { handleProfilePasswordChange } = usePasswordChange()
+    const { handleLogout } = useLogout()
     const { userInfo, isLoading } = useUserProfile()
-
-    const onLogout = async (e) => {
-        e.preventDefault()
-        handleLogout(showAlert)
-    }
-    
-    const onPasswordChange = async (e) => {
-        e.preventDefault()
-        handlePasswordChange('', '', showAlert)
-    }
 
     return (
         <div className="flex flex-col items-center gap-y-8 px-10 py-7">
@@ -31,7 +23,7 @@ const Profile = () => {
             }
             <div>
                 {!isLoading && <ProfileInfo userInfo={userInfo} />}
-                <ProfileActions onLogout={onLogout} onPasswordChange={onPasswordChange} />
+                <ProfileActions onLogout={(e) => handleLogout(e, showAlert)} onPasswordChange={(e) => handleProfilePasswordChange(e, showAlert, '', '')} />
             </div>
         </div>
     )

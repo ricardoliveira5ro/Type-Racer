@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { UsersAPI } from "../api/usersAPI";
 
-export const useAPIHandler = () => {
+export const useAuthentication = () => {
 
     const navigate = useNavigate()
 
@@ -44,25 +44,5 @@ export const useAPIHandler = () => {
         }
     }
 
-    const handleLogout = async (showAlert) => {
-        const { success } = await UsersAPI.logout()
-
-        if (success) {
-            navigate('/home')
-            return
-        }
-        
-        showAlert('ERROR', 'Unable to logout')
-    }
-
-    const handlePasswordChange = async (oldPassword, newPassword, showAlert) => {
-        // To be implemented
-        const success = true
-
-        if (success) {
-            showAlert('SUCCESS', 'Password changed successfully')
-        }
-    }
-
-    return { handleLoginSubmit, handleSignupSubmit, handleLogout, handlePasswordChange }
+    return { handleLoginSubmit, handleSignupSubmit }
 }
