@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 import { useFormAuthentication } from '../../hooks/useFormAuthentication';
 import { useAlert } from '../../hooks/useAlert';
-import { useAPIHandler } from '../../hooks/useAPIHandler';
+import { useAuthentication } from '../../hooks/useAuthentication';
 
 import { validateField, validateEmail, validatePassword } from '../../utils/validators';
 
@@ -19,7 +19,7 @@ const Authentication = () => {
 
     const { formData, errors, handleInputChange, clearInputs, setError } = useFormAuthentication();
     const { isActive, alertType, alertText, showAlert, dismissAlert } = useAlert();
-    const { handleLoginSubmit, handleSignupSubmit } = useAPIHandler();
+    const { handleLoginSubmit, handleSignupSubmit } = useAuthentication();
 
     const containerRef = useRef(null);
     const signUpButtonRef = useRef(null);
