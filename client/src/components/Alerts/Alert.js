@@ -15,7 +15,7 @@ function Alert({ text, type, onDismissAlert }) {
                             type === 'WARNING' ? 'bg-orange-200 text-yellow-800' :
                                 'bg-red-200 text-red-800'}`}
                 data-aos="zoom-in" data-aos-duration="800">
-            <div className='flex gap-x-2'>
+            <div className='flex items-center gap-x-2'>
                 {alertIcon(type)}
                 <span>{text}</span>
             </div>

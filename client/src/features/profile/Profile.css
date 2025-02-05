@@ -9,3 +9,16 @@
 .profile-stats > li {
     @apply bg-[var(--green)] px-3 py-0.5 rounded-sm text-white !font-light
 }
+
+/* Change password container */
+.profile-change-password {
+    @apply flex flex-col justify-around items-center bg-white rounded-md mt-12 p-6 gap-y-4
+}
+
+.profile-change-password > input {
+    @apply bg-[#eee] px-4 py-1.5 text-sm rounded-md w-full
+}
+
+.profile-change-password > button {
+    @apply bg-[var(--green)] w-full text-white rounded-md py-0.5
+}
