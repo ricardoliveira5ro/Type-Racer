@@ -95,10 +95,16 @@ router.get('/profile', [jwtMiddleware, authMiddleware], async (req, res, next) =
     }
 })
 
-// Update profile
-router.put('/profile', [jwtMiddleware, authMiddleware], async (req, res, next) => {
+// Update password
+router.put('/password', [jwtMiddleware, authMiddleware], async (req, res, next) => {
     try {
-        await User.updateOne({ _id: req.user._id }, req.body)
+        await User.authenticate(req.user.email, req.body.oldPassword)
+
+        await User.updateOne(
+            { _id: req.user._id }, 
+            { $set: { password: req.body.newPassword } },
+            { runValidators: true }
+        )
 
         res.send({ message: "Update successful" })
 
