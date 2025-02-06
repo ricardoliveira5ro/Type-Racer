@@ -70,6 +70,15 @@ userSchema.pre('save', async function (next) {
     next()
 })
 
+userSchema.pre('updateOne', async function (next) {
+    const data = this.getUpdate();
+    if (data.password) {
+        data.password = await bcrypt.hash(data.password, 8);
+    }
+    
+    next()
+})
+
 // statics: Model functions
 // methods: Instance functions
 

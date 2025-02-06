@@ -95,4 +95,16 @@ router.get('/profile', [jwtMiddleware, authMiddleware], async (req, res, next) =
     }
 })
 
+// Update profile
+router.put('/profile', [jwtMiddleware, authMiddleware], async (req, res, next) => {
+    try {
+        await User.updateOne({ _id: req.user._id }, req.body)
+
+        res.send({ message: "Update successful" })
+
+    } catch (e) {
+        next(e)
+    }
+})
+
 module.exports = router
