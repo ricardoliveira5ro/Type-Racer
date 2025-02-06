@@ -71,11 +71,13 @@ userSchema.pre('save', async function (next) {
 })
 
 userSchema.pre('updateOne', async function (next) {
-    const data = this.getUpdate();
-    if (data.password) {
-        data.password = await bcrypt.hash(data.password, 8);
+    const isModifiedPassword = this.getUpdate().$set.password;
+
+    if (isModifiedPassword) {
+        this.getUpdate().$set.password = await bcrypt.hash(isModifiedPassword, 8);
+        next();
     }
-    
+
     next()
 })
 
