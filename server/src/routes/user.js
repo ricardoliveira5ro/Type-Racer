@@ -100,11 +100,8 @@ router.put('/password', [jwtMiddleware, authMiddleware], async (req, res, next) 
     try {
         await User.authenticate(req.user.email, req.body.oldPassword)
 
-        await User.updateOne(
-            { _id: req.user._id }, 
-            { $set: { password: req.body.newPassword } },
-            { runValidators: true }
-        )
+        req.user.password = req.body.newPassword
+        await req.user.save()
 
         res.send({ message: "Update successful" })
 
