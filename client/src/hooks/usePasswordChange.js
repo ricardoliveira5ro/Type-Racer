@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { validatePassword } from '../utils/validators';
+import { UsersAPI } from "../api/usersAPI";
 
 export const usePasswordChange = () => {
 
@@ -9,13 +10,8 @@ export const usePasswordChange = () => {
     
     const [isActive, setIsActive] = useState(false)
     
-    //oldPassword, newPassword, confirmationPassword, 
     const handlePasswordChange = async (e, showAlert) => {
         e.preventDefault()
-
-        console.log(oldPassword)
-        console.log(newPassword)
-        console.log(confirmationPassword)
 
         const newPasswordValidation = validatePassword(newPassword)
         const confirmationPasswordValidation = validatePassword(confirmationPassword)
@@ -36,8 +32,26 @@ export const usePasswordChange = () => {
             return;
         }
 
-        // Implement API call to check current password and update mechanism
+        const { success, error } = await UsersAPI.changePassword({ oldPassword, newPassword })
+
+        if (!success) {
+            if (error.response?.status === 401) {
+                showAlert('ERROR', 'Old password incorrect')
+                return;
+            }
+
+            // General Error
+            showAlert();
+            return;
+        }
+
         showAlert('SUCCESS', 'Password changed successfully')
+
+        // Clear inputs and hide form
+        setOldPassword('')
+        setNewPassword('')
+        setConfirmationPassword('')
+        setIsActive(false);
     }
 
     return { setOldPassword, setNewPassword, setConfirmationPassword, isActive, setIsActive, handlePasswordChange }

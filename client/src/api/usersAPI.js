@@ -76,6 +76,22 @@ export const UsersAPI = {
         } catch (error) {
             return { success: false, error }
         }
+    },
+
+    changePassword: async (formData, cancel = false) => {
+        try {
+            const response = await api.request({
+                url: '/users/password',
+                method: 'PUT',
+                data: formData,
+                signal: cancel ? cancelApiObject[this.changePassword.name].handleRequestCancellation().signal : undefined
+            })
+
+            return { success: true, data: response.data }
+            
+        } catch (error) {
+            return { success: false, error }
+        }
     }
 }
 
