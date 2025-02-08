@@ -51,6 +51,8 @@ There are some options to get/generate the text that will be typed by the player
     - API Quotable IO
 - Integrate Open AI to generate
 
+Project Gutenberg is a library with free license eBooks. The idea could be extracting meaningful paragraphs from several books using any AI tool or creating a small script to do that
+
 ### Color Scheme
 
 - **Dark**: <span style="background-color: #161718; color: #161718; padding: 2px 5px; border-radius: 3px;">#161718</span> #161718
