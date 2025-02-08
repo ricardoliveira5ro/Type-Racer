@@ -11,6 +11,10 @@ This file may contain outdated and not implemented ideas, it just serves the pur
     - 'Lax' -> using react local server :5000, allowing cross-origin requests
     - 'Strict' -> using node server with react build, same origin
 
+### Mongoose
+
+- Run validators do not work in update actions (findOneAndUpdate / updateOne), must update the object directly and use save action
+
 ### Folder Structure
 
 Client (Frontend) - React.js
