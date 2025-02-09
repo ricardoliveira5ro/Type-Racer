@@ -53,6 +53,9 @@ There are some options to get/generate the text that will be typed by the player
 
 Project Gutenberg is a library with free license eBooks. The idea could be extracting meaningful paragraphs from several books using any AI tool or creating a small script to do that
 
+- Asset static file with quote - source - author
+- Load in AppContext once the app starts and use it globally without having to load every time needed
+
 ### Color Scheme
 
 - **Dark**: <span style="background-color: #161718; color: #161718; padding: 2px 5px; border-radius: 3px;">#161718</span> #161718
@@ -97,3 +100,8 @@ Project Gutenberg is a library with free license eBooks. The idea could be extra
 ```
 "settingsSync.ignoredSettings": ["restoreTerminals.terminals"]
 ```
+
+### Localhost port already in use (find and kill process)
+
+- netstat -ano | findstr {port}
+- taskkill /F /pid {pid}

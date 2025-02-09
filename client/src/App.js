@@ -1,3 +1,5 @@
+import { AppProvider } from "./context/AppContext";
+
 import { Navigate, Route, Routes } from "react-router-dom";
 import { ProtectedRoute } from "./components/ProtectedRoute/ProtectedRoute";
 
@@ -12,19 +14,19 @@ function App() {
   AOS.init();
 
   return (
-    <div>
-      <Routes>
-        {/* Public routes */}
-        <Route path='/' element={<Navigate to='/home' replace />} />
-        <Route path='/home' element={<Home />} />
-        <Route path='/auth' element={<Authentication />} />
+    <AppProvider>
+        <Routes>
+          {/* Public routes */}
+          <Route path='/' element={<Navigate to='/home' replace />} />
+          <Route path='/home' element={<Home />} />
+          <Route path='/auth' element={<Authentication />} />
 
-        {/* Protected routes */}
-        <Route path='/' element={<ProtectedRoute />}>
-          <Route path='/profile' element={<Profile />} />
-        </Route>
-      </Routes>
-    </div>
+          {/* Protected routes */}
+          <Route path='/' element={<ProtectedRoute />}>
+            <Route path='/profile' element={<Profile />} />
+          </Route>
+        </Routes>
+    </AppProvider>
   );
 }
 
