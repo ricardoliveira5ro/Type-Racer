@@ -105,3 +105,9 @@ Project Gutenberg is a library with free license eBooks. The idea could be extra
 
 - netstat -ano | findstr {port}
 - taskkill /F /pid {pid}
+
+### Email API Service (password recovery)
+
+- Sendgrid is very popular however had some trouble trying to sign up and login into the account
+- Mailgun is free trial tier
+- Resend (final choice) has 100 emails per day limitation and no bulk email sending
