@@ -33,7 +33,7 @@ function Header() {
                     :
                     <>
                         <button onClick={() => navigate('/auth')} className='bg-[var(--green)] w-28 py-1 rounded-md'>Sign In</button>
-                        <button onClick={() => { }} className='bg-[var(--dark)] text-white w-28 py-1 rounded-md'>Logout</button>
+                        <button onClick={() => navigate('/auth')} className='bg-[var(--dark)] text-white w-28 py-1 rounded-md'>Login</button>
                     </>    
                 }
             </div>
