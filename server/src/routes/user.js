@@ -7,6 +7,10 @@ const router = new express.Router()
 const jwtMiddleware = require('../middleware/jwt')
 const authMiddleware = require('../middleware/auth')
 
+const { Resend } = require('resend')
+
+const AppError = require('../errors/Error');
+
 const User = require('../models/user');
 const UserStats = require('../models/userStats');
 
@@ -104,6 +108,30 @@ router.put('/password', [jwtMiddleware, authMiddleware], async (req, res, next) 
         await req.user.save()
 
         res.send({ message: "Update successful" })
+
+    } catch (e) {
+        next(e)
+    }
+})
+
+// Password recovery
+router.post('/recovery', async (req, res, next) => {
+    try {
+        const userEmail = req.body.email;
+        const resend = new Resend(process.env.RESEND_API_KEY);
+
+        const data = await resend.emails.send({
+            from: 'type-racer.support@resend.dev',
+            to: userEmail,
+            subject: 'Password recovery',
+            html: '<p>To recover and reset your password follow this link</p>'
+        });
+
+        if (data.error) {
+            throw new AppError(data.error.message, data.error.statusCode)
+        }
+
+        res.send({ message: "Recovery email sent" })
 
     } catch (e) {
         next(e)

@@ -111,3 +111,4 @@ Project Gutenberg is a library with free license eBooks. The idea could be extra
 - Sendgrid is very popular however had some trouble trying to sign up and login into the account
 - Mailgun is free trial tier
 - Resend (final choice) has 100 emails per day limitation and no bulk email sending
+    - Using default domain `@resend.dev` but there is an option to use and verify custom domains
