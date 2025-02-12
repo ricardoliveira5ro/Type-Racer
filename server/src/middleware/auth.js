@@ -13,6 +13,9 @@ const authMiddleware = async (req, res, next) => {
     const user = await User.findOne({ _id: decoded._id, 'tokens.token': token })
 
     if (!user) {
+        res.clearCookie("type-racer-header-payload")
+        res.clearCookie("type-racer-signature")
+        
         throw new AppError('Please authenticate', 401)
     }
 
