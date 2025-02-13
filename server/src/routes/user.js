@@ -6,6 +6,7 @@ const router = new express.Router()
 
 const jwtMiddleware = require('../middleware/jwt')
 const authMiddleware = require('../middleware/auth')
+const resetMiddleware = require('../middleware/resetMiddleware')
 
 const { Resend } = require('resend')
 const { randomUUID } = require('crypto')
@@ -61,6 +62,15 @@ router.post('/login', async (req, res, next) => {
 router.get('/token', [jwtMiddleware, authMiddleware], async (req, res, next) => {
     try {
         res.send({ user: req.user })
+    } catch (e) {
+        next(e)
+    }
+})
+
+// Verify reset token
+router.get('/reset-token', resetMiddleware, async (req, res, next) => {
+    try {
+        res.send({ message: "Verified" })
     } catch (e) {
         next(e)
     }
@@ -127,12 +137,12 @@ router.post('/recovery', async (req, res, next) => {
 
         const uuid = randomUUID()
         user.password_reset_token = uuid
-        user.password_reset_expiration = Date.now() + 1*60*60*1000
+        user.password_reset_expiration = Date.now() + 1*60*60*1000 // 1 hour
 
         await user.save()
 
         const domain = process.env.NODE_ENV === "development" ? "http://localhost:3000" : "to-be-changed"
-        const link = `<a href="${domain}/reset-password?reset_token=${uuid}">link</a>`
+        const link = `<a href="${domain}/reset-password?user=${user.email}&reset_token=${uuid}">link</a>`
 
         const resend = new Resend(process.env.RESEND_API_KEY);
 
