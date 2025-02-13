@@ -142,7 +142,7 @@ router.post('/recovery', async (req, res, next) => {
         await user.save()
 
         const domain = process.env.NODE_ENV === "development" ? "http://localhost:3000" : "to-be-changed"
-        const link = `<a href="${domain}/reset-password?user=${user.email}&reset_token=${uuid}">link</a>`
+        const link = `<a href="${domain}/reset-password?user=${user.username}&reset_token=${uuid}">link</a>`
 
         const resend = new Resend(process.env.RESEND_API_KEY);
 
