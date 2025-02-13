@@ -4,10 +4,10 @@ const AppError = require('../errors/Error')
 const User = require('../models/user')
 
 const resetMiddleware = async (req, res, next) => {
-    const userEmail = req.query.user
+    const username = req.query.user
     const resetToken = req.query.reset_token
 
-    const user = await User.findOne({ email: userEmail })
+    const user = await User.findOne({ username: username })
     if (!user) {
         return next(new AppError('User not found', 404))
     }
