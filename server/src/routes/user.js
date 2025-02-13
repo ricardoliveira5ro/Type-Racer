@@ -8,6 +8,7 @@ const jwtMiddleware = require('../middleware/jwt')
 const authMiddleware = require('../middleware/auth')
 
 const { Resend } = require('resend')
+const { randomUUID } = require('crypto')
 
 const AppError = require('../errors/Error');
 
@@ -117,14 +118,29 @@ router.put('/password', [jwtMiddleware, authMiddleware], async (req, res, next) 
 // Password recovery
 router.post('/recovery', async (req, res, next) => {
     try {
-        const userEmail = req.body.email;
+        const userEmail = req.body.email
+        const user = await User.findOne({ email: userEmail })
+
+        if (!user) {
+            throw new AppError("User not found", 404)
+        }
+
+        const uuid = randomUUID()
+        user.password_reset_token = uuid
+        user.password_reset_expiration = Date.now() + 1*60*60*1000
+
+        await user.save()
+
+        const domain = process.env.NODE_ENV === "development" ? "http://localhost:3000" : "to-be-changed"
+        const link = `<a href="${domain}/reset-password?reset_token=${uuid}">link</a>`
+
         const resend = new Resend(process.env.RESEND_API_KEY);
 
         const data = await resend.emails.send({
             from: 'type-racer.support@resend.dev',
             to: userEmail,
             subject: 'Password recovery',
-            html: '<p>To recover and reset your password follow this link</p>'
+            html: `<p>To recover and reset your password follow this ${link}</p>`
         });
 
         if (data.error) {
