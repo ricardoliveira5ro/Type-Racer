@@ -16,7 +16,7 @@ const authMiddleware = async (req, res, next) => {
         res.clearCookie("type-racer-header-payload")
         res.clearCookie("type-racer-signature")
         
-        throw new AppError('Please authenticate', 401)
+        return next(new AppError('Please authenticate', 401))
     }
 
     req.user = user
