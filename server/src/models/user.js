@@ -41,7 +41,15 @@ const userSchema = new mongoose.Schema({
             type: String,
             required: true
         }
-    }]
+    }],
+    password_reset_token: {
+        type: String,
+        required: false
+    },
+    password_reset_expiration: {
+        type: Date,
+        required: false
+    }
 }, {
     timestamps: true
 })
@@ -65,6 +73,10 @@ userSchema.pre('remove', async function (next) {
 userSchema.pre('save', async function (next) {
     if (this.isModified('password')) {
         this.password = await bcrypt.hash(this.password, 8)
+    }
+
+    if (this.isModified('password_reset_token')) {
+        this.password_reset_token = await bcrypt.hash(this.password_reset_token, 8)
     }
 
     next()
