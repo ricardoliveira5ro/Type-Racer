@@ -164,4 +164,20 @@ router.post('/recovery', async (req, res, next) => {
     }
 })
 
+// Password reset
+router.post('/reset', resetMiddleware, async (req, res, next) => {
+    try {
+        req.user.password = req.body.password
+        req.user.password_reset_token = undefined
+        req.user.password_reset_expiration = undefined
+        await req.user.save()
+
+        res.send({ message: "Reset successful" })
+
+    } catch (e) {
+        next(e)
+    }
+})
+
+
 module.exports = router

@@ -12,6 +12,10 @@ const resetMiddleware = async (req, res, next) => {
         return next(new AppError('User not found', 404))
     }
 
+    if (!user.password_reset_token) {
+        return next(new AppError('Invalid reset token', 401))
+    }
+
     const isMatch = await bcrypt.compare(resetToken, user.password_reset_token)
     if (!isMatch) {
         return next(new AppError('Invalid reset token', 401))
@@ -25,6 +29,7 @@ const resetMiddleware = async (req, res, next) => {
         return next(new AppError('Reset token expired', 401))
     }
 
+    req.user = user
     next()
 }
 
