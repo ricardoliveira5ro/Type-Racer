@@ -48,6 +48,23 @@ export const UsersAPI = {
         }
     },
 
+    verifyResetToken: async (params, cancel = false) => {
+        try {
+            await api.request({
+                url: '/users/reset-token',
+                params: params,
+                method: 'GET',
+                signal: cancel ? cancelApiObject[this.verifyResetToken.name].handleRequestCancellation().signal : undefined
+            })
+
+            return { success: true }
+
+        } catch (error) {
+            return { success: false, error }
+        }
+    },
+
+
     logout: async (cancel = false) => {
         try {
             await api.request({
