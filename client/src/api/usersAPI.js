@@ -109,6 +109,22 @@ export const UsersAPI = {
         } catch (error) {
             return { success: false, error }
         }
+    },
+
+    resetPassword: async (formData, cancel = false) => {
+        try {
+            await api.request({
+                url: '/users/reset',
+                method: 'POST',
+                data: formData,
+                signal: cancel ? cancelApiObject[this.resetPassword.name].handleRequestCancellation().signal : undefined
+            })
+
+            return { success: true }
+            
+        } catch (error) {
+            return { success: false, error }
+        }
     }
 }
 
