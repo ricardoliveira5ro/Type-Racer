@@ -71,11 +71,11 @@ userSchema.pre('remove', async function (next) {
 
 // Encode password before saving
 userSchema.pre('save', async function (next) {
-    if (this.isModified('password')) {
+    if (this.password && this.isModified('password')) {
         this.password = await bcrypt.hash(this.password, 8)
     }
 
-    if (this.isModified('password_reset_token')) {
+    if (this.password_reset_token && this.isModified('password_reset_token')) {
         this.password_reset_token = await bcrypt.hash(this.password_reset_token, 8)
     }
 
