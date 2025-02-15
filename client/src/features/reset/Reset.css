@@ -1,0 +1,17 @@
+.reset-password {
+    @apply flex flex-col justify-around items-center rounded-md mt-12 p-4 gap-y-4 w-1/2
+}
+
+.reset-password > input {
+    @apply bg-[#eee] px-4 py-1.5 rounded-md w-full
+}
+
+.reset-password > button {
+    @apply bg-[var(--green)] w-full text-white rounded-md py-1.5
+}
+
+@media (max-width: 1000px) {
+    .reset-password {
+        @apply w-full
+    }
+}
