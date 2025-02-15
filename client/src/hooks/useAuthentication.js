@@ -44,5 +44,18 @@ export const useAuthentication = () => {
         }
     }
 
-    return { handleLoginSubmit, handleSignupSubmit }
+    const handlePasswordRecoverySubmit = async (formData, showAlert) => {
+        const { success } = await UsersAPI.recoveryPassword(formData)
+
+        if (success) {
+            showAlert('SUCCESS', 'We\'ve sent a password reset link, please check your inbox')
+
+            return;
+        }
+
+        // General Error
+        showAlert();
+    }
+
+    return { handleLoginSubmit, handleSignupSubmit, handlePasswordRecoverySubmit }
 }

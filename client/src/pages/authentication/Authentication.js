@@ -19,7 +19,7 @@ const Authentication = () => {
 
     const { formData, errors, handleInputChange, clearInputs, setError } = useFormAuthentication();
     const { isActive, alertType, alertText, showAlert, dismissAlert } = useAlert();
-    const { handleLoginSubmit, handleSignupSubmit } = useAuthentication();
+    const { handleLoginSubmit, handleSignupSubmit, handlePasswordRecoverySubmit } = useAuthentication();
 
     const containerRef = useRef(null);
     const signUpButtonRef = useRef(null);
@@ -54,6 +54,15 @@ const Authentication = () => {
             handleLoginSubmit(formData, clearInputs, showAlert)
         }
     };
+
+    const onPasswordRecoverySubmit = async () => {
+        const emailValidation = validateField(formData.email)
+        setError('email', emailValidation.error)
+
+        if (emailValidation.isValid) {
+            handlePasswordRecoverySubmit(formData, showAlert)
+        }
+    }
 
     useEffect(() => {
         const signUpButton = signUpButtonRef.current;
@@ -100,6 +109,7 @@ const Authentication = () => {
                         errors={errors}
                         handleInputChange={handleInputChange}
                         onSubmit={onLoginSubmit}
+                        onPasswordRecovery={onPasswordRecoverySubmit}
                     />
                 </div>
                 <Overlay

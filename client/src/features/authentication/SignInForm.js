@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SignInForm = ({ formData, errors, handleInputChange, onSubmit }) => (
+const SignInForm = ({ formData, errors, handleInputChange, onSubmit, onPasswordRecovery }) => (
     <form onSubmit={onSubmit}>
         <h1>Sign in</h1>
         <div className="social-container">
@@ -27,7 +27,7 @@ const SignInForm = ({ formData, errors, handleInputChange, onSubmit }) => (
             className={errors.password ? 'invalid-input' : ''}
         />
         <span className="w-full text-left text-red-600">{errors.password}</span>
-        <a href="#">Forgot your password?</a>
+        <a href='#' onClick={() => onPasswordRecovery()}>Forgot your password?</a>
         <button type="submit">Log In</button>
     </form>
 );

@@ -111,6 +111,22 @@ export const UsersAPI = {
         }
     },
 
+    recoveryPassword: async (formData, cancel = false) => {
+        try {
+            await api.request({
+                url: '/users/recovery',
+                method: 'POST',
+                data: formData,
+                signal: cancel ? cancelApiObject[this.recoveryPassword.name].handleRequestCancellation().signal : undefined
+            })
+
+            return { success: true }
+            
+        } catch (error) {
+            return { success: false, error }
+        }
+    },
+
     resetPassword: async (params, formData, cancel = false) => {
         try {
             await api.request({
