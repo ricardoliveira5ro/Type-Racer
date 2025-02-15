@@ -29,6 +29,10 @@ const resetMiddleware = async (req, res, next) => {
         return next(new AppError('Reset token expired', 401))
     }
 
+    // Force logout
+    res.clearCookie("type-racer-header-payload")
+    res.clearCookie("type-racer-signature")
+
     req.user = user
     next()
 }
