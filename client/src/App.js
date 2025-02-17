@@ -8,6 +8,7 @@ import Home from "./pages/home/Home";
 import Authentication from "./pages/authentication/Authentication";
 import Profile from "./pages/profile/Profile";
 import ResetPassword from "./pages/reset/ResetPassword";
+import Practice from "./pages/practice/Practice";
 
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -22,6 +23,7 @@ function App() {
           <Route path='/' element={<Navigate to='/home' replace />} />
           <Route path='/home' element={<Home />} />
           <Route path='/auth' element={<Authentication />} />
+          <Route path='/practice' element={<Practice />} />
 
           {/* Protected routes */}
           <Route path='/' element={<ProtectedRoute />}>
