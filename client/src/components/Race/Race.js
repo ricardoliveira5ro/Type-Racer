@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import CountUpTimer from '../Timer/CountupTime';
+import CountUpTimer from '../Timer/CountupTimer';
 
 function Race({ title }) {
 
