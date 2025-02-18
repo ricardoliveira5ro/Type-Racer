@@ -23,7 +23,3 @@ const useAppContext = () => {
 };
 
 export { AppProvider, useAppContext }
-
-// Usage in component
-// import { useAppContext } from "../../context/AppContext"; 
-// const { quotes } = useAppContext()
