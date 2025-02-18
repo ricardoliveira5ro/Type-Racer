@@ -13,6 +13,8 @@ const { randomUUID } = require('crypto')
 
 const AppError = require('../errors/Error');
 
+const recoveryTemplate = require('../emails/emailTemplates');
+
 const User = require('../models/user');
 const UserStats = require('../models/userStats');
 
@@ -142,7 +144,8 @@ router.post('/recovery', async (req, res, next) => {
         await user.save()
 
         const domain = process.env.NODE_ENV === "development" ? "http://localhost:3000" : "to-be-changed"
-        const link = `<a href="${domain}/reset-password?user=${user.username}&reset_token=${uuid}">link</a>`
+        const link = `${domain}/reset-password?user=${user.username}&reset_token=${uuid}`
+        const html = recoveryTemplate(user, link)
 
         const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -150,7 +153,7 @@ router.post('/recovery', async (req, res, next) => {
             from: 'type-racer.support@resend.dev',
             to: userEmail,
             subject: 'Password recovery',
-            html: `<p>To recover and reset your password follow this ${link}</p>`
+            html: html
         });
 
         if (data.error) {
