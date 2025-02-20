@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { useAppContext } from "../../context/AppContext"
 import CountUpTimer from '../Timer/CountupTimer';
@@ -10,8 +10,16 @@ function Race({ title }) {
     const { quotes } = useAppContext()
     const [quote, setQuote] = useState(null)
 
+    const [typedWords, setTypedWords] = useState([])
+    const [remainingWords, setRemainingWords] = useState([])
+
+    const inputRef = useRef(null)
+
     useEffect(() => {
-        setQuote(quotes[~~(Math.random() * quotes.length)])
+        const tmpQuote = quotes[~~(Math.random() * quotes.length)]
+        
+        setQuote(tmpQuote)
+        tmpQuote && setRemainingWords(tmpQuote.text.split(' '))
     }, [quotes])
 
     const [isRacing, setIsRacing] = useState(false);
@@ -20,6 +28,17 @@ function Race({ title }) {
     useEffect(() => {
         setIsRacing(true)
     }, [])
+
+    const inputChange = (e) => {
+        if (e.target.value.slice(-1) === ' ' && remainingWords.length > 0 && remainingWords[0] === e.target.value.split(' ')[0]) {
+            setTypedWords([...typedWords, remainingWords[0]])
+            setRemainingWords(remainingWords.slice(1))
+
+            inputRef.current.value = ''
+            return
+        }
+    }
+
 
     return (
         <div className='flex flex-col gap-y-8'>
@@ -73,7 +92,7 @@ function Race({ title }) {
                         {quote &&
                             <p className='mt-4 text-xl text-justify'>{quote.text}</p>
                         }
-                        <input placeholder='Type here' className='p-2 text-lg border-[1px] border-gray-400' type='text'></input>
+                        <input onChange={(e) => inputChange(e)} ref={inputRef} placeholder='Type here' className='p-2 text-lg border-[1px] border-gray-400' type='text'></input>
                     </div>
                 </div>
             </div>
