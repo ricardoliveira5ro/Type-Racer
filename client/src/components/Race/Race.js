@@ -90,7 +90,13 @@ function Race({ title }) {
 
                     <div className='flex flex-col gap-y-4 mb-4'>
                         {quote &&
-                            <p className='mt-4 text-xl text-justify'>{quote.text}</p>
+                            <div className='quote'>
+                                <p className='text-green-600'>{typedWords.join(' ')} </p>
+                                {remainingWords[0] && remainingWords[0].split('').map((c, index) => (
+                                    <p key={index}>{c}</p>
+                                ))}
+                                <p> {remainingWords.slice(1).join(' ')}</p>
+                            </div>
                         }
                         <input onChange={(e) => inputChange(e)} ref={inputRef} placeholder='Type here' className='p-2 text-lg border-[1px] border-gray-400' type='text'></input>
                     </div>
