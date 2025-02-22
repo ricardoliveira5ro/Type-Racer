@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { useAppContext } from "../../context/AppContext"
 import CountUpTimer from '../Timer/CountupTimer';
@@ -9,18 +9,79 @@ function Race({ title }) {
 
     const { quotes } = useAppContext()
     const [quote, setQuote] = useState(null)
+    const [quoteWords, setQuoteWords] = useState(null)
 
-    const [typedWords, setTypedWords] = useState([])
-    const [remainingWords, setRemainingWords] = useState([])
+    const [userInput, setUserInput] = useState("")
+    const [currentWord, setCurrentWord] = useState(null)
+    const [wordIndex, setWordIndex] = useState(0)
 
-    const inputRef = useRef(null)
+    const typedWords = useMemo(
+        () => quoteWords?.slice(0, wordIndex).join(' '),
+        [quoteWords, wordIndex]
+    )
+
+    const remainingWords = useMemo(
+        () => quoteWords?.slice(wordIndex + 1, quoteWords?.length).join(' '),
+        [quoteWords, wordIndex]
+    )
+
+    const correctWordPart = useMemo(() => {
+        if (currentWord) {
+            let i = 0;
+            while (i < userInput.length) {
+                if (userInput[i] !== currentWord[i]) {
+                    break;
+                }
+                i++;
+            }
+            return userInput.slice(0, i);
+        }
+
+        return "";
+    }, [currentWord, userInput])
+
+    const wrongWordPart = useMemo(
+        () =>
+            currentWord?.slice(
+                correctWordPart.length,
+                userInput.length
+            ),
+        [correctWordPart, currentWord, userInput]
+    )
 
     useEffect(() => {
         const tmpQuote = quotes[~~(Math.random() * quotes.length)]
-        
+
         setQuote(tmpQuote)
-        tmpQuote && setRemainingWords(tmpQuote.text.split(' '))
+        tmpQuote && setQuoteWords(tmpQuote.text.split(' '))
     }, [quotes])
+
+    useEffect(() => {
+        setWordIndex(0)
+        setUserInput('')
+    }, [quoteWords])
+
+    useEffect(() => {
+        quoteWords && setCurrentWord(quoteWords[wordIndex])
+    }, [wordIndex, quoteWords])
+
+    useEffect(() => {
+        if (userInput.slice(-1) !== ' ' && wordIndex !== quoteWords?.length - 1) return
+
+        if (userInput.trimEnd() === currentWord) {
+            setUserInput('')
+            setWordIndex(() => wordIndex + 1)
+        }
+
+    }, [userInput, currentWord, wordIndex, quoteWords])
+
+    useEffect(() => {
+        if (wordIndex === quoteWords?.length) {
+            // End game
+        }
+    }, [wordIndex, quoteWords]);
+
+    /* --------------------------------------------- */
 
     const [isRacing, setIsRacing] = useState(false);
 
@@ -28,17 +89,6 @@ function Race({ title }) {
     useEffect(() => {
         setIsRacing(true)
     }, [])
-
-    const inputChange = (e) => {
-        if (e.target.value.slice(-1) === ' ' && remainingWords.length > 0 && remainingWords[0] === e.target.value.split(' ')[0]) {
-            setTypedWords([...typedWords, remainingWords[0]])
-            setRemainingWords(remainingWords.slice(1))
-
-            inputRef.current.value = ''
-            return
-        }
-    }
-
 
     return (
         <div className='flex flex-col gap-y-8'>
@@ -90,15 +140,15 @@ function Race({ title }) {
 
                     <div className='flex flex-col gap-y-4 mb-4'>
                         {quote &&
-                            <div className='quote'>
-                                <p className='text-green-600'>{typedWords.join(' ')} </p>
-                                {remainingWords[0] && remainingWords[0].split('').map((c, index) => (
-                                    <p key={index}>{c}</p>
-                                ))}
-                                <p> {remainingWords.slice(1).join(' ')}</p>
-                            </div>
+                            <p className='quote'>
+                                <span className="text-green-600">{typedWords} </span>
+                                <span className="text-green-600">{correctWordPart}</span>
+                                <span className="text-red-700 bg-red-200">{wrongWordPart}</span>
+                                <span className="underline">{currentWord?.slice(userInput.length)}</span>
+                                <span className="text-black"> {remainingWords}</span>
+                            </p>
                         }
-                        <input onChange={(e) => inputChange(e)} ref={inputRef} placeholder='Type here' className='p-2 text-lg border-[1px] border-gray-400' type='text'></input>
+                        <input onChange={(e) => setUserInput(e.target.value)} value={userInput} placeholder='Type here' className='p-2 text-lg border-[1px] border-gray-400' type='text'></input>
                     </div>
                 </div>
             </div>
