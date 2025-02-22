@@ -12,6 +12,7 @@ function Race({ title }) {
     const [quoteWords, setQuoteWords] = useState(null)
 
     const [userInput, setUserInput] = useState("")
+    const [wrongInput, setWrongInput] = useState(false)
     const [currentWord, setCurrentWord] = useState(null)
     const [wordIndex, setWordIndex] = useState(0)
 
@@ -79,7 +80,11 @@ function Race({ title }) {
         if (wordIndex === quoteWords?.length) {
             // End game
         }
-    }, [wordIndex, quoteWords]);
+    }, [wordIndex, quoteWords])
+
+    useEffect(() => {
+        wrongWordPart ? setWrongInput(true) : setWrongInput(false)
+    }, [wrongWordPart])
 
     /* --------------------------------------------- */
 
@@ -148,7 +153,9 @@ function Race({ title }) {
                                 <span className="text-black"> {remainingWords}</span>
                             </p>
                         }
-                        <input onChange={(e) => setUserInput(e.target.value)} value={userInput} placeholder='Type here' className='p-2 text-lg border-[1px] border-gray-400' type='text'></input>
+                        <input onChange={(e) => setUserInput(e.target.value)} value={userInput} 
+                                placeholder='Type here' className={`p-2 text-lg border-[1px] rounded-md border-gray-400 ${wrongInput ? 'bg-red-300' : 'bg-white'}`} type='text'>
+                        </input>
                     </div>
                 </div>
             </div>
