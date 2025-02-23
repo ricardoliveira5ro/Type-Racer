@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
+
 import { useQuoteTyping } from '../../hooks/useQuoteTyping';
+import { carColor } from '../../utils/carColor'
 
 import CountUpTimer from '../Timer/CountupTimer';
 
 import './Race.css'
 
-function Race({ title }) {
+function Race({ title, players }) {
 
     const { quote, typedWords, remainingWords, correctWordPart, wrongWordPart, currentWord, userInput, setUserInput, inputBgColor } = useQuoteTyping()
 
@@ -29,40 +31,18 @@ function Race({ title }) {
                 </div>
 
                 <div className='flex flex-col w-full gap-y-6'>
-                    <div className='flex items-center w-full gap-x-6'>
-                        <div className='flex flex-col w-full'>
-                            <div>
-                                <img src={require('../../assets/images/car-green.webp')} alt='Car' />
+                    {players?.map((player, index) => (
+                        <div className='flex items-center w-full gap-x-6'>
+                            <div className='flex flex-col w-full'>
+                                <div>
+                                    <img src={carColor(index + 1)} alt='Car' />
+                                </div>
+                                <hr className='horizontal-bar'></hr>
+                                <p>{player.username}</p>
                             </div>
-                            <hr className='horizontal-bar'></hr>
+                            <p className='min-w-fit'>0 wpm</p>
                         </div>
-                        <p className='min-w-fit'>41 wpm</p>
-                    </div>
-                    <div className='flex items-center w-full gap-x-6'>
-                        <div className='flex flex-col w-full'>
-                            <div>
-                                <img src={require('../../assets/images/car-blue.webp')} alt='Car' />
-                            </div>
-                            <hr className='horizontal-bar'></hr>
-                        </div>
-                        <p className='min-w-fit'>41 wpm</p>
-                    </div><div className='flex items-center w-full gap-x-6'>
-                        <div className='flex flex-col w-full'>
-                            <div>
-                                <img src={require('../../assets/images/car-red.webp')} alt='Car' />
-                            </div>
-                            <hr className='horizontal-bar'></hr>
-                        </div>
-                        <p className='min-w-fit'>41 wpm</p>
-                    </div><div className='flex items-center w-full gap-x-6'>
-                        <div className='flex flex-col w-full'>
-                            <div>
-                                <img src={require('../../assets/images/car-yellow.webp')} alt='Car' />
-                            </div>
-                            <hr className='horizontal-bar'></hr>
-                        </div>
-                        <p className='min-w-fit'>41 wpm</p>
-                    </div>
+                    ))}
 
                     <div className='flex flex-col gap-y-4 mb-4'>
                         {quote &&
