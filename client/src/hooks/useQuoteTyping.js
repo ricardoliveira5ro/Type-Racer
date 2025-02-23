@@ -9,9 +9,10 @@ export const useQuoteTyping = () => {
     const [quoteWords, setQuoteWords] = useState(null)
 
     const [userInput, setUserInput] = useState("")
-    const [isWrongInput, setIsWrongInput] = useState(false)
     const [currentWord, setCurrentWord] = useState(null)
     const [wordIndex, setWordIndex] = useState(0)
+
+    const [inputBgColor, setInputBgColor] = useState("bg-white");
 
     const typedWords = useMemo(
         () => quoteWords?.slice(0, wordIndex).join(' '),
@@ -42,10 +43,6 @@ export const useQuoteTyping = () => {
         () => currentWord?.slice(correctWordPart.length,userInput.length),
         [correctWordPart, currentWord, userInput]
     )
-
-    useEffect(() => {
-        wrongWordPart ? setIsWrongInput(true) : setIsWrongInput(false)
-    }, [wrongWordPart])
 
     useEffect(() => {
         const tmpQuote = quotes[~~(Math.random() * quotes.length)]
@@ -79,6 +76,11 @@ export const useQuoteTyping = () => {
         }
     }, [wordIndex, quoteWords])
 
+    useEffect(() => {
+        (wrongWordPart || userInput.length > currentWord?.length) ? setInputBgColor("bg-red-300") :
+                                                                    setInputBgColor("bg-white")
+    }, [wrongWordPart, userInput, currentWord]);
+
     return {
         quote,
         typedWords,
@@ -88,6 +90,6 @@ export const useQuoteTyping = () => {
         currentWord,
         userInput,
         setUserInput,
-        isWrongInput
+        inputBgColor
     }
 }
