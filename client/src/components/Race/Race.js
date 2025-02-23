@@ -7,7 +7,7 @@ import './Race.css'
 
 function Race({ title }) {
 
-    const { quote, typedWords, remainingWords, correctWordPart, wrongWordPart, currentWord, userInput, setUserInput, isWrongInput } = useQuoteTyping()
+    const { quote, typedWords, remainingWords, correctWordPart, wrongWordPart, currentWord, userInput, setUserInput, inputBgColor } = useQuoteTyping()
 
     const [isRacing, setIsRacing] = useState(false);
 
@@ -74,8 +74,8 @@ function Race({ title }) {
                                 <span className="text-black"> {remainingWords}</span>
                             </p>
                         }
-                        <input onChange={(e) => setUserInput(e.target.value)} value={userInput} 
-                                placeholder='Type here' className={`p-2 text-lg border-[1px] rounded-md border-gray-400 ${isWrongInput ? 'bg-red-300' : 'bg-white'}`} type='text'>
+                        <input onChange={(e) => setUserInput(e.target.value)} value={userInput} placeholder='Type here' type='text'
+                           className={`p-2 text-lg border-[1px] rounded-md border-gray-400 ${inputBgColor}`}>
                         </input>
                     </div>
                 </div>
