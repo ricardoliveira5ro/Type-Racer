@@ -1,92 +1,13 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useQuoteTyping } from '../../hooks/useQuoteTyping';
 
-import { useAppContext } from "../../context/AppContext"
 import CountUpTimer from '../Timer/CountupTimer';
 
 import './Race.css'
 
 function Race({ title }) {
 
-    const { quotes } = useAppContext()
-    const [quote, setQuote] = useState(null)
-    const [quoteWords, setQuoteWords] = useState(null)
-
-    const [userInput, setUserInput] = useState("")
-    const [wrongInput, setWrongInput] = useState(false)
-    const [currentWord, setCurrentWord] = useState(null)
-    const [wordIndex, setWordIndex] = useState(0)
-
-    const typedWords = useMemo(
-        () => quoteWords?.slice(0, wordIndex).join(' '),
-        [quoteWords, wordIndex]
-    )
-
-    const remainingWords = useMemo(
-        () => quoteWords?.slice(wordIndex + 1, quoteWords?.length).join(' '),
-        [quoteWords, wordIndex]
-    )
-
-    const correctWordPart = useMemo(() => {
-        if (currentWord) {
-            let i = 0;
-            while (i < userInput.length) {
-                if (userInput[i] !== currentWord[i]) {
-                    break;
-                }
-                i++;
-            }
-            return userInput.slice(0, i);
-        }
-
-        return "";
-    }, [currentWord, userInput])
-
-    const wrongWordPart = useMemo(
-        () =>
-            currentWord?.slice(
-                correctWordPart.length,
-                userInput.length
-            ),
-        [correctWordPart, currentWord, userInput]
-    )
-
-    useEffect(() => {
-        const tmpQuote = quotes[~~(Math.random() * quotes.length)]
-
-        setQuote(tmpQuote)
-        tmpQuote && setQuoteWords(tmpQuote.text.split(' '))
-    }, [quotes])
-
-    useEffect(() => {
-        setWordIndex(0)
-        setUserInput('')
-    }, [quoteWords])
-
-    useEffect(() => {
-        quoteWords && setCurrentWord(quoteWords[wordIndex])
-    }, [wordIndex, quoteWords])
-
-    useEffect(() => {
-        if (userInput.slice(-1) !== ' ' && wordIndex !== quoteWords?.length - 1) return
-
-        if (userInput.trimEnd() === currentWord) {
-            setUserInput('')
-            setWordIndex(() => wordIndex + 1)
-        }
-
-    }, [userInput, currentWord, wordIndex, quoteWords])
-
-    useEffect(() => {
-        if (wordIndex === quoteWords?.length) {
-            // End game
-        }
-    }, [wordIndex, quoteWords])
-
-    useEffect(() => {
-        wrongWordPart ? setWrongInput(true) : setWrongInput(false)
-    }, [wrongWordPart])
-
-    /* --------------------------------------------- */
+    const { quote, typedWords, remainingWords, correctWordPart, wrongWordPart, currentWord, userInput, setUserInput, isWrongInput } = useQuoteTyping()
 
     const [isRacing, setIsRacing] = useState(false);
 
@@ -154,7 +75,7 @@ function Race({ title }) {
                             </p>
                         }
                         <input onChange={(e) => setUserInput(e.target.value)} value={userInput} 
-                                placeholder='Type here' className={`p-2 text-lg border-[1px] rounded-md border-gray-400 ${wrongInput ? 'bg-red-300' : 'bg-white'}`} type='text'>
+                                placeholder='Type here' className={`p-2 text-lg border-[1px] rounded-md border-gray-400 ${isWrongInput ? 'bg-red-300' : 'bg-white'}`} type='text'>
                         </input>
                     </div>
                 </div>
