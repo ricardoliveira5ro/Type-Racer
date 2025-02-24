@@ -22,6 +22,7 @@ function Race({ title, players }) {
         
         timerId = setTimeout(() => {
             setIsRacing(true)
+            userInputRef.current.disabled = false
             userInputRef.current.focus()
         }, 15000);
     
@@ -67,7 +68,7 @@ function Race({ title, players }) {
                                 <span className="text-black"> {remainingWords}</span>
                             </p>
                         }
-                        <input onChange={(e) => setUserInput(e.target.value)} value={userInput} ref={userInputRef} placeholder='Type here' type='text'
+                        <input onChange={(e) => setUserInput(e.target.value)} value={userInput} ref={userInputRef} placeholder='Type here' type='text' disabled
                            className={`p-2 text-lg border-[1px] rounded-md border-gray-400 ${inputBgColor}`}>
                         </input>
                     </div>
