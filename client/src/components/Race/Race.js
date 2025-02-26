@@ -16,7 +16,6 @@ function Race({ title, players }) {
 
     const [isRacing, setIsRacing] = useState(false);
 
-    // To be changed, starting after the initial countdown
     useEffect(() => {
         let timerId
         
@@ -29,6 +28,18 @@ function Race({ title, players }) {
         return () => clearTimeout(timerId)
     }, [])
 
+    const [elapsedTime, setElapsedTime] = useState(0)
+    const [wpm, setWpm] = useState(0)
+
+    useEffect(() => {
+        if (!elapsedTime) return
+
+        const wordsTyped = typedWords?.length / 5 // Convert to words (5 chars = 1 word)
+        const timeMinutes = elapsedTime / 1000 / 60
+
+        setWpm(~~(wordsTyped / timeMinutes))
+    }, [typedWords]) // eslint-disable-line react-hooks/exhaustive-deps
+
     return (
         <div className='flex flex-col gap-y-8'>
             <div className='flex justify-center items-center gap-x-4'>
@@ -40,7 +51,7 @@ function Race({ title, players }) {
                 {isRacing &&
                     <div className='flex justify-between w-full'>
                         <p className='text-sm'>Type as fast as you can!</p>
-                        <CountUpTimer isRacing={isRacing} />
+                        <CountUpTimer isRacing={isRacing} setElapsedTime={setElapsedTime} />
                     </div>
                 }
 
@@ -54,7 +65,7 @@ function Race({ title, players }) {
                                 <hr className='horizontal-bar'></hr>
                                 <p>{player.username}</p>
                             </div>
-                            <p className='min-w-fit'>0 wpm</p>
+                            <p className='min-w-fit'>{wpm} wpm</p>
                         </div>
                     ))}
 

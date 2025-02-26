@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function CountUpTimer({ isRacing }) {
+function CountUpTimer({ isRacing, setElapsedTime }) {
 
     const [time, setTime] = useState("00:00");
 
@@ -22,6 +22,7 @@ function CountUpTimer({ isRacing }) {
         const id = setInterval(() => {
             const left = new Date() - initTime;
             showTimer(left);
+            setElapsedTime(left);
             if (left <= 0) {
                 setTime("00:00:00:00");
                 clearInterval(id);
@@ -29,7 +30,7 @@ function CountUpTimer({ isRacing }) {
         }, 1);
         
         return () => clearInterval(id);
-    }, [isRacing]);
+    }, [isRacing]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <span>{time}</span>
