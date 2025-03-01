@@ -3,7 +3,7 @@ import { UsersAPI } from '../api/usersAPI';
 
 export const useUserProfile = () => {
     const [isLoading, setIsLoading] = useState(true)
-    const [userInfo, setUserInfo] = useState({})
+    const [userInfo, setUserInfo] = useState(null)
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -23,8 +23,8 @@ export const useUserProfile = () => {
                     bestRaceWPM: data.user.stats.bestRaceWPM,
                     lastRaceWPM: data.user.stats.lastRaceWPM,
                 })
-                setIsLoading(false)
             }
+            setIsLoading(false)
         };
 
         fetchUser();
