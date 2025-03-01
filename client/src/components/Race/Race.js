@@ -44,8 +44,8 @@ function Race({ title, players }) {
                     {players?.map((player, index) => (
                         <div key={index} className='flex items-center w-full gap-x-6'>
                             <div className='flex flex-col w-full'>
-                                <div>
-                                    <img src={carColor(index + 1)} alt='Car' />
+                                <div id={`div-car-${index + 1}`}>
+                                    <img id={`img-car-${index + 1}`} src={carColor(index + 1)} alt='Car' />
                                 </div>
                                 <hr className='horizontal-bar'></hr>
                                 <p>{player.username}</p>
