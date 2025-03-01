@@ -54,6 +54,14 @@ export const useQuoteTyping = () => {
         [correctWordPart, currentWord, userInput]
     )
 
+    const distanceToMove = useMemo(() => {
+        const carDiv = document.getElementById('div-car-1')
+        const carImg = document.getElementById('img-car-1')
+        if (!carDiv || !carImg || !quoteWords) return
+
+        return ((carDiv.offsetWidth - carImg.offsetWidth || 64) / quoteWords.length)
+    }, [quoteWords])
+
 
     // Randomize quote
     useEffect(() => {
@@ -117,6 +125,17 @@ export const useQuoteTyping = () => {
 
         prevUserInputRef.current = userInput
     }, [userInput, wrongWordPart, wrongCharactersCount])
+
+
+    // Translate car
+    useEffect(() => {
+        const carImg = document.getElementById('img-car-1')
+        if (!carImg || !typedWords || !distanceToMove) return
+
+        console.log("HERE")
+        carImg.style.transform = `translateX(${(distanceToMove * wordIndex)}px)`
+
+    }, [typedWords, distanceToMove, wordIndex])
 
 
     // End game
