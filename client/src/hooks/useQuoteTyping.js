@@ -54,6 +54,8 @@ export const useQuoteTyping = () => {
         [correctWordPart, currentWord, userInput]
     )
 
+
+    // Randomize quote
     useEffect(() => {
         const tmpQuote = quotes[~~(Math.random() * quotes.length)]
 
@@ -61,15 +63,21 @@ export const useQuoteTyping = () => {
         tmpQuote && setQuoteWords(tmpQuote.text.split(' '))
     }, [quotes])
 
+
+    // Set word index in quote
     useEffect(() => {
         setWordIndex(0)
         setUserInput('')
     }, [quoteWords])
 
+
+    // Set current word
     useEffect(() => {
         quoteWords && setCurrentWord(quoteWords[wordIndex])
     }, [wordIndex, quoteWords])
 
+
+    // Evaluate userInput with current word
     useEffect(() => {
         if (userInput.slice(-1) !== ' ' && wordIndex !== quoteWords?.length - 1) return
 
@@ -80,23 +88,15 @@ export const useQuoteTyping = () => {
 
     }, [userInput, currentWord, wordIndex, quoteWords])
 
-    useEffect(() => {
-        if (wordIndex === quoteWords?.length) {
-            // End game
-            setIsRacing(false)
-            userInputRef.current.disabled = true
 
-            const totalCharacters = quote?.text.length
-            const totalCharactersTypes = totalCharacters + wrongCharactersCount
-            setAccuracy(~~((totalCharacters / totalCharactersTypes) * 100))
-        }
-    }, [wordIndex, quoteWords, quote, wrongCharactersCount])
-
+    // Set input background color
     useEffect(() => {
         (wrongWordPart || userInput.length > currentWord?.length) ? setInputBgColor("bg-red-300") :
                                                                     setInputBgColor("bg-white")
     }, [wrongWordPart, userInput, currentWord]);
 
+
+    // Calculate wpm
     useEffect(() => {
         if (!elapsedTime || !isRacing) return
 
@@ -106,6 +106,8 @@ export const useQuoteTyping = () => {
         setWpm(~~(wordsTyped / timeMinutes))
     }, [typedWords]) // eslint-disable-line react-hooks/exhaustive-deps
 
+
+    // Count user typing errors
     useEffect(() => {
         const prevUserInput = prevUserInputRef.current;
         
@@ -115,6 +117,19 @@ export const useQuoteTyping = () => {
 
         prevUserInputRef.current = userInput
     }, [userInput, wrongWordPart, wrongCharactersCount])
+
+
+    // End game
+    useEffect(() => {
+        if (wordIndex === quoteWords?.length) {
+            setIsRacing(false)
+            userInputRef.current.disabled = true
+
+            const totalCharacters = quote?.text.length
+            const totalCharactersTypes = totalCharacters + wrongCharactersCount
+            setAccuracy(~~((totalCharacters / totalCharactersTypes) * 100))
+        }
+    }, [wordIndex, quoteWords, quote, wrongCharactersCount])
 
     return {
         isRacing,
