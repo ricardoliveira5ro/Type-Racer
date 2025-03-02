@@ -6,9 +6,9 @@ import { carColor } from '../../utils/carColor'
 
 import CountUpTimer from '../Timer/CountupTimer';
 import CountDownTimer from '../Timer/CountdownTime';
+import RaceAnalysis from '../RaceAnalysis/RaceAnalysis';
 
 import './Race.css'
-import RaceAnalysis from '../RaceAnalysis/RaceAnalysis';
 
 function Race({ mode, players }) {
 
@@ -40,13 +40,11 @@ function Race({ mode, players }) {
                         <CountUpTimer isRacing={isRacing} setElapsedTime={setElapsedTime} />
                     </div>
                 }
-
                 {hasEnded && 
                     <div className='flex justify-between w-full'>
                         <p className='text-lg'>{mode === 'Practice' ? 'The race has ended' : 'You finished 1st'}</p>
                     </div>
                 }
-
                 <div className='flex flex-col w-full gap-y-6'>
                     {players?.map((player, index) => (
                         <div key={index} className='flex items-center w-full gap-x-6'>
