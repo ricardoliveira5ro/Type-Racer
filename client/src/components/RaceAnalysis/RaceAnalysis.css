@@ -1,0 +1,13 @@
+@media (max-width: 1000px) {
+    .race-analysis-container {
+        @apply flex-col
+    }
+
+    .race-quote-container {
+        @apply w-full
+    }
+    
+    .race-stats-container {
+        @apply w-full justify-center
+    }        
+}

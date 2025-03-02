@@ -4,7 +4,8 @@ import { useAppContext } from "../context/AppContext"
 
 export const useQuoteTyping = () => {
 
-    const [isRacing, setIsRacing] = useState(false);
+    const [isRacing, setIsRacing] = useState(false)
+    const [hasEnded, setHasEnded] = useState(false)
  
     const { quotes } = useAppContext()
     const [quote, setQuote] = useState(null)
@@ -149,6 +150,7 @@ export const useQuoteTyping = () => {
     useEffect(() => {
         if (wordIndex === quoteWords?.length) {
             setIsRacing(false)
+            setHasEnded(true)
             userInputRef.current.disabled = true
 
             const totalCharacters = quote?.text.length
@@ -160,6 +162,7 @@ export const useQuoteTyping = () => {
     return {
         isRacing,
         setIsRacing,
+        hasEnded,
         quote,
         typedWords,
         remainingWords,
@@ -172,6 +175,7 @@ export const useQuoteTyping = () => {
         inputBgColor,
         wpm,
         accuracy,
+        elapsedTime,
         setElapsedTime,
     }
 }

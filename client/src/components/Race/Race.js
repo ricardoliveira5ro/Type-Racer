@@ -8,10 +8,11 @@ import CountUpTimer from '../Timer/CountupTimer';
 import CountDownTimer from '../Timer/CountdownTime';
 
 import './Race.css'
+import RaceAnalysis from '../RaceAnalysis/RaceAnalysis';
 
-function Race({ title, players }) {
+function Race({ mode, players }) {
 
-    const { isRacing, setIsRacing, quote, typedWords, remainingWords, correctWordPart, wrongWordPart, currentWord, userInput, setUserInput, userInputRef, inputBgColor, wpm, setElapsedTime } = useQuoteTyping()
+    const { isRacing, setIsRacing, hasEnded, quote, typedWords, remainingWords, correctWordPart, wrongWordPart, currentWord, userInput, setUserInput, userInputRef, inputBgColor, wpm, accuracy, elapsedTime, setElapsedTime } = useQuoteTyping()
 
     useEffect(() => {
         let timerId
@@ -29,14 +30,20 @@ function Race({ title, players }) {
         <div className='flex flex-col gap-y-8'>
             <div className='flex justify-center items-center gap-x-4'>
                 <img src={require('../../assets/images/race-flag.webp')} alt='Race flag' />
-                <p className='text-white text-2xl'>{title}</p>
+                <p className='text-white text-2xl'>{mode}</p>
             </div>
             {(!isRacing && !typedWords) && <CountDownTimer />}
             <div className='flex flex-col justify-between items-center bg-white rounded-md px-5 py-3 w-full gap-y-4'>
                 {isRacing &&
                     <div className='flex justify-between w-full'>
-                        <p className='text-sm'>Type as fast as you can!</p>
+                        <p className='text'>Type as fast as you can!</p>
                         <CountUpTimer isRacing={isRacing} setElapsedTime={setElapsedTime} />
+                    </div>
+                }
+
+                {hasEnded && 
+                    <div className='flex justify-between w-full'>
+                        <p className='text-lg'>{mode === 'Practice' ? 'The race has ended' : 'You finished 1st'}</p>
                     </div>
                 }
 
@@ -70,6 +77,7 @@ function Race({ title, players }) {
                     </div>
                 </div>
             </div>
+            {hasEnded && <RaceAnalysis quote={quote} stats={{ wpm, accuracy, elapsedTime, position: 1 }} />}
         </div>
     );
 }
