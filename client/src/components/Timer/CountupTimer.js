@@ -1,17 +1,12 @@
 import { useEffect, useState } from "react";
+import { timeFormat } from "../../utils/timeFormat";
 
 function CountUpTimer({ isRacing, setElapsedTime }) {
 
     const [time, setTime] = useState("00:00");
 
     const showTimer = (ms) => {
-        const second = Math.floor((ms / 1000) % 60)
-            .toString()
-            .padStart(2, "0");
-        const minute = Math.floor((ms / 1000 / 60) % 60)
-            .toString()
-            .padStart(2, "0");
-        setTime(minute + ":" + second);
+        setTime(timeFormat(ms))
     };
 
     useEffect(() => {

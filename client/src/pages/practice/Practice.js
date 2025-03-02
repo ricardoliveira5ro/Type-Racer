@@ -21,7 +21,7 @@ function Practice() {
     return (
         <div className="flex flex-col px-10 py-7 gap-y-8">
             <Header />
-            {(!isLoading && players) && <Race title={'Practice'} players={players} />}
+            {(!isLoading && players) && <Race mode={'Practice'} players={players} />}
         </div>
     );
 }
