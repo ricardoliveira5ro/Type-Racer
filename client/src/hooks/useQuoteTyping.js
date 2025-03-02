@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
 import { useAppContext } from "../context/AppContext"
 
 
@@ -23,6 +23,8 @@ export const useQuoteTyping = () => {
 
     const prevUserInputRef = useRef("");
     const [wrongCharactersCount, setWrongCharactersCount] = useState(0);
+
+    const [distanceToMove, setDistanceToMove] = useState(0)
 
     const typedWords = useMemo(
         () => quoteWords?.slice(0, wordIndex).join(' '),
@@ -54,14 +56,6 @@ export const useQuoteTyping = () => {
         [correctWordPart, currentWord, userInput]
     )
 
-    const distanceToMove = useMemo(() => {
-        const carDiv = document.getElementById('div-car-1')
-        const carImg = document.getElementById('img-car-1')
-        if (!carDiv || !carImg || !quoteWords) return
-
-        return ((carDiv.offsetWidth - carImg.offsetWidth || 64) / quoteWords.length)
-    }, [quoteWords])
-
 
     // Randomize quote
     useEffect(() => {
@@ -83,6 +77,20 @@ export const useQuoteTyping = () => {
     useEffect(() => {
         quoteWords && setCurrentWord(quoteWords[wordIndex])
     }, [wordIndex, quoteWords])
+
+
+    // Wait until it renders and set distance to move after each word
+    useLayoutEffect(() => {
+        setTimeout(() => {
+            const carDiv = document.getElementById('div-car-1')
+            const carImg = document.getElementById('img-car-1')
+            if (!carDiv || !carImg || !quoteWords) return
+
+            const spaceAvailable = (carDiv.offsetWidth - (carImg.offsetWidth || 64))
+            setDistanceToMove(~~(spaceAvailable / quoteWords.length))
+        }, 2000)
+
+    }, [quoteWords])
 
 
     // Evaluate userInput with current word
@@ -132,7 +140,6 @@ export const useQuoteTyping = () => {
         const carImg = document.getElementById('img-car-1')
         if (!carImg || !typedWords || !distanceToMove) return
 
-        console.log("HERE")
         carImg.style.transform = `translateX(${(distanceToMove * wordIndex)}px)`
 
     }, [typedWords, distanceToMove, wordIndex])
