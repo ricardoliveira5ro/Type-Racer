@@ -12,7 +12,7 @@ function ProfileInfo({ userInfo }) {
                         <span className='text-[var(--green)]'>Email: <span className='display-email'>{userInfo.email}</span></span>
                     </div>
                 </div>
-                <span className='text-3xl'>{userInfo.wpm}</span>
+                <p className='text-lg'><span className='text-3xl'>{userInfo.wpm}</span> WPM</p>
             </div>
             <div className="flex flex-col">
                 <ul className="profile-stats">
