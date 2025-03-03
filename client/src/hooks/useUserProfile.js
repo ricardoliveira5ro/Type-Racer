@@ -18,8 +18,8 @@ export const useUserProfile = () => {
                     wins: data.user.stats.wins,
                     accuracy: data.user.stats.accuracy,
                     wpm: data.user.stats.wpm,
-                    wpmLast10Races: data.user.stats.wpmLast10Races,
-                    accuracyLast10Races: data.user.stats.accuracyLast10Races,
+                    wpmLast10Races: data.user.stats.wpmLast10RacesAvg,
+                    accuracyLast10Races: data.user.stats.accuracyLast10RacesAvg,
                     bestRaceWPM: data.user.stats.bestRaceWPM,
                     lastRaceWPM: data.user.stats.lastRaceWPM,
                 })
