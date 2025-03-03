@@ -101,9 +101,9 @@ router.post('/logout', [jwtMiddleware, authMiddleware], async (req, res, next) =
 // Profile
 router.get('/profile', [jwtMiddleware, authMiddleware], async (req, res, next) => {
     try {
-        const user = req.user.toObject()
-        const stats = await UserStats.findOne({ user: user._id })
-        user.stats = stats
+        const user = req.user.toJSON()
+        const stats = await UserStats.findOne({ user: req.user._id })
+        user.stats = stats.toJSON()        
 
         res.send({ user: user })
 
