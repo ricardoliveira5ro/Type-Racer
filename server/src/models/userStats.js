@@ -17,11 +17,19 @@ const userStatsSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    wpmLast10Races : {
+    wpmLast10Races: [{
+        type: Number,
+        default: 0
+    }],
+    wpmLast10RacesAvg: {
         type: Number,
         default: 0
     },
-    accuracyLast10Races: {
+    accuracyLast10Races: [{
+        type: Number,
+        default: 0
+    }],
+    accuracyLast10RacesAvg: {
         type: Number,
         default: 0
     },
@@ -40,6 +48,22 @@ const userStatsSchema = new mongoose.Schema({
     }
 }, {
     timestamps: true
+})
+
+userStatsSchema.pre('findOneAndUpdate', async function (next) {
+    const update = this.getUpdate()
+
+    if (update.wpmLast10Races) {
+        const avg = update.wpmLast10Races.reduce((sum, currentValue) => sum + currentValue, 0) / update.wpmLast10Races.length
+        update.wpmLast10RacesAvg = ~~avg
+    }
+
+    if (update.accuracyLast10Races) {
+        const avg = update.accuracyLast10Races.reduce((sum, currentValue) => sum + currentValue, 0) / update.accuracyLast10Races.length
+        update.accuracyLast10RacesAvg = ~~avg
+    }
+
+    next()
 })
 
 const UserStats = mongoose.model('UserStats', userStatsSchema)
