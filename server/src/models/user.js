@@ -120,6 +120,8 @@ userSchema.methods.toJSON = function () {
     delete userObject._id
     delete userObject.password
     delete userObject.tokens
+    delete userObject.password_reset_token
+    delete userObject.password_reset_expiration
     delete userObject.createdAt
     delete userObject.updatedAt
     delete userObject.__v

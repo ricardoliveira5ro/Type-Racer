@@ -50,6 +50,7 @@ const userStatsSchema = new mongoose.Schema({
     timestamps: true
 })
 
+// Automatically recalculate wpm and accuracy averages
 userStatsSchema.pre('findOneAndUpdate', async function (next) {
     const update = this.getUpdate()
 
@@ -65,6 +66,21 @@ userStatsSchema.pre('findOneAndUpdate', async function (next) {
 
     next()
 })
+
+// Model custom JSON 
+userStatsSchema.methods.toJSON = function () {
+    const userStatsObject = this.toObject()
+
+    delete userStatsObject._id
+    delete userStatsObject.user
+    delete userStatsObject.wpmLast10Races
+    delete userStatsObject.accuracyLast10Races
+    delete userStatsObject.createdAt
+    delete userStatsObject.updatedAt
+    delete userStatsObject.__v
+
+    return userStatsObject
+}
 
 const UserStats = mongoose.model('UserStats', userStatsSchema)
 

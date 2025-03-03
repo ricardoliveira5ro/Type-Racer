@@ -35,8 +35,8 @@ router.put('/post-race', [jwtMiddleware, authMiddleware], async (req, res, next)
             
         }, { new: true, upsert: true })
 
-        const user = req.user.toObject()
-        user.stats = newStats
+        const user = req.user.toJSON()
+        user.stats = newStats.toJSON()
 
         res.send({ user: user })
 
