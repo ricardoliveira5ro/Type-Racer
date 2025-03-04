@@ -120,6 +120,7 @@ A Lobby will be created if there isn't one to join, the model:
 - `players`: Array of User model (max 4)
 - `isPrivate`: True for custom mode
 - `startCountDown`: Avoid accepting new players in the lobby and manage the countdown timer for every player in the lobby at the same time
+- `code`: Lobby public identifier
 
 When creating a new lobby a 10 seconds timeout will be activated, this is the time frame for other players to join.
 After that `startCountDown` will changed to true and send (socket io), to all the players in the lobby, this flag so the countdown timer in every client would start at the same time
