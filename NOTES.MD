@@ -112,3 +112,15 @@ Project Gutenberg is a library with free license eBooks. The idea could be extra
 - Mailgun is free trial tier
 - Resend (final choice) has 100 emails per day limitation and no bulk email sending
     - Using default domain `@resend.dev` but there is an option to use and verify custom domains
+
+### Multiplayer logic
+
+A Lobby will be created if there isn't one to join, the model:
+
+- `players`: Array of User model (max 4)
+- `isPrivate`: True for custom mode
+- `startCountDown`: Avoid accepting new players in the lobby and manage the countdown timer for every player in the lobby at the same time
+
+When creating a new lobby a 10 seconds timeout will be activated, this is the time frame for other players to join.
+After that `startCountDown` will changed to true and send (socket io), to all the players in the lobby, this flag so the countdown timer in every client would start at the same time
+The normal logic will be implemented with socket io at each word typed to communicate between the players client. When the game ends this lobby will be deleted, this could occur when every player disconnects
