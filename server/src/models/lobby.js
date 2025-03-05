@@ -1,14 +1,15 @@
 const mongoose = require('mongoose')
 const { randomBytes } = require('crypto')
 
-const User = require('./user');
+// Players can be registered users or guests
+const playerSchema = new mongoose.Schema({
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
+    guestName: { type: String, default: null } // guest
+}, { _id: false });
 
 const lobbySchema = new mongoose.Schema({
     players: {
-        type: [{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User' 
-        }],
+        type: [playerSchema],
         validate: {
             validator: (arr) => arr.length <= 4,
             message: 'Max 4 players in a lobby'
