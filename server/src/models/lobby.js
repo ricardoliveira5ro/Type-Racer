@@ -39,6 +39,20 @@ lobbySchema.pre('save', async function(next) {
     next()
 })
 
+// Model custom JSON 
+lobbySchema.methods.toJSON = function () {
+    const lobbyObject = this.toObject()
+
+    delete lobbyObject._id
+    delete lobbyObject.players
+    delete lobbyObject.isPrivate
+    delete lobbyObject.createdAt
+    delete lobbyObject.updatedAt
+    delete lobbyObject.__v
+
+    return lobbyObject
+}
+
 const Lobby = mongoose.model('Lobby', lobbySchema)
 
 module.exports = Lobby
