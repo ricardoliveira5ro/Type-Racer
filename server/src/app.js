@@ -7,6 +7,7 @@ const globalErrorHandler = require('./middleware/errorHandler')
 
 const userRoutes = require('./routes/user')
 const statsRoutes = require('./routes/stats')
+const lobbyRoutes = require('./routes/lobby')
 
 require("dotenv").config({ path: path.resolve(__dirname, './config/.env.dev') });
 require('./db/mongoose')
@@ -30,6 +31,7 @@ const server = http.createServer(app)
 // API routes
 app.use('/api/users', userRoutes);
 app.use('/api/stats', statsRoutes);
+app.use('/api/lobby', lobbyRoutes);
 
 // Error Handler
 app.use(globalErrorHandler)
