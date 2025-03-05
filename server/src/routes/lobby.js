@@ -11,24 +11,17 @@ const Lobby = require('../models/lobby');
 // Search for lobby or create one
 router.get('/find', guestMiddleware, async (req, res, next) => {
     try {
-        const availableLobby = await Lobby.findOne({ isPrivate: false, startCountDown: false, $where: 'this.players.length < 4' })
+        let lobby = await Lobby.findOne({ isPrivate: false, startCountDown: false, $where: 'this.players.length < 4' })
+        const player = req.user ? { user: req.user._id } : { guestName: 'GUEST' }
         
-        if (availableLobby) {
-            req.user ? availableLobby.players.push({ user: req.user._id })
-                    : availableLobby.players.push({ guestName: 'GUEST' })
-            await availableLobby.save()
+        if (lobby)
+            lobby.players.push(player)
+        else
+            lobby = new Lobby({ players: [player] })
 
-        } else {
-            
-            if (req.user)
-                newLobby = new Lobby({ players: [{ user: req.user._id }] })
-            else
-                newLobby = new Lobby({ players: [{ guestName: 'GUEST' }] })
+        await lobby.save()
 
-            await newLobby.save()
-        }
-
-        res.send({ lobby: availableLobby || newLobby })
+        res.send({ lobby: lobby })
 
     } catch (e) {
         next(e)
