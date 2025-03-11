@@ -14,18 +14,47 @@ router.get('/find', guestMiddleware, async (req, res, next) => {
         let lobby = await Lobby.findOne({ isPrivate: false, startCountDown: false, $where: 'this.players.length < 4' })
         const player = req.user ? { user: req.user._id } : { guestName: 'GUEST' }
         
-        if (lobby)
+        let isNewLobby = false;
+
+        if (lobby) {
             lobby.players.push(player)
-        else
+        }
+        else {
             lobby = new Lobby({ players: [player] })
+            isNewLobby = true;
+        }
 
         await lobby.save()
 
         res.send({ lobby: lobby })
 
+        if (isNewLobby) {
+            startTimeFrameWindowToJoin(lobby._id)
+        }
+
     } catch (e) {
         next(e)
     }
 })
+
+const startTimeFrameWindowToJoin = (lobbyId) => {
+    setTimeout(async () => {
+        try {
+            // Fetch the lobby again because of new players
+            const lobby = await Lobby.findById(lobbyId)
+
+            if (!lobby || lobby.startCountDown) return;
+
+            lobby.startCountDown = true
+            await lobby.save()
+
+            // Notify all the players in the lobby (Send to frontend)
+            // notify()
+
+        } catch (e) {
+            console.log(e)
+        }
+    }, 10000) // 10 seconds
+}
 
 module.exports = router
