@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import socket from '../../socket/socket'
 
 import { useQuoteTyping } from '../../hooks/useQuoteTyping';
 
@@ -10,7 +11,7 @@ import RaceAnalysis from '../RaceAnalysis/RaceAnalysis';
 
 import './Race.css'
 
-function Race({ mode, players }) {
+function Race({ mode, players, lobby }) {
 
     const { isRacing, setIsRacing, hasEnded, quote, typedWords, remainingWords, correctWordPart, wrongWordPart, currentWord, userInput, setUserInput, userInputRef, inputBgColor, wpm, accuracy, elapsedTime, setElapsedTime } = useQuoteTyping()
 
@@ -25,6 +26,17 @@ function Race({ mode, players }) {
     
         return () => clearTimeout(timerId)
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+    useEffect(() => {
+        console.log('AQUI')
+        socket.on("playerJoined", ({ lobby }) => {
+            console.log(lobby)
+        });
+
+        return () => {
+            socket.off("playerJoined")
+        };
+    }, [socket])
 
     return (
         <div className='flex flex-col gap-y-8'>

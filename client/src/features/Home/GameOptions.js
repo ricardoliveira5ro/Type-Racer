@@ -6,13 +6,13 @@ function GameOptions() {
         <div>
             <div className='flex justify-center'><img src={require('../../assets/images/f1.webp')} alt='f1 icon' /></div>
             <div className="grid grid-cols-2 gap-4 mt-8">
-                <div className="bg-[var(--grey)] rounded-md px-5 py-3">
+                <Link to={'/multiplayer'} className="bg-[var(--grey)] rounded-md px-5 py-3">
                     <div className="flex items-center gap-x-2 mb-2">
                         <span className="text-white text-lg">Multiplayer</span>
                         <Gamepad2 color='white' size={22} />
                     </div>
                     <p className='text-white'>Join the global typing race! Compete against players from around the world and climb the leaderboard to prove you're the fastest typist.</p>
-                </div>
+                </Link>
                 <div className="grid grid-row-2 gap-4">
                     <Link to={'/practice'} className="bg-[var(--grey)] rounded-md px-5 py-3">
                         <div className="flex items-center gap-x-2 mb-2">
