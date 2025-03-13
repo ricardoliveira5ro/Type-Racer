@@ -6,7 +6,7 @@ import Race from "../../components/Race/Race";
 import { useUserProfile } from "../../hooks/useUserProfile";
 import { useFindLobby } from "../../hooks/useFindLobby";
 
-function Multiplayer() {
+function Multiplayer({ socket }) {
 
     const { userInfo, isLoading: isUserLoading } = useUserProfile()
     const { lobby, isLoading: isLobbyLoading } = useFindLobby(isUserLoading, userInfo)
@@ -24,7 +24,7 @@ function Multiplayer() {
         <div className="flex flex-col px-10 py-7 gap-y-8">
             <Header />
             {(!isUserLoading && players && !isLobbyLoading && lobby) && 
-                <Race mode={'Multiplayer'} players={players} lobby={lobby} />
+                <Race socket={socket} mode={'Multiplayer'} players={players} lobby={lobby} />
             }
         </div>
     );

@@ -1,5 +1,7 @@
 import { AppProvider } from "./context/AppContext";
 
+import socket from './socket/socket'
+
 import { Navigate, Route, Routes } from "react-router-dom";
 import { ProtectedRoute } from "./components/ProtectedRoute/ProtectedRoute";
 import { ProtectedResetRoute } from "./components/ProtectedResetRoute/ProtectedResetRoute";
@@ -25,7 +27,7 @@ function App() {
           <Route path='/home' element={<Home />} />
           <Route path='/auth' element={<Authentication />} />
           <Route path='/practice' element={<Practice />} />
-          <Route path='/multiplayer' element={<Multiplayer />} />
+          <Route path='/multiplayer' element={<Multiplayer socket={socket} />} />
 
           {/* Protected routes */}
           <Route path='/' element={<ProtectedRoute />}>

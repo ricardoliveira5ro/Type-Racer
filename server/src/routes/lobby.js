@@ -11,8 +11,6 @@ const Lobby = require('../models/lobby');
 // Search for lobby or create one
 router.get('/find', guestMiddleware, async (req, res, next) => {
     try {
-        const io = req.app.get('io')
-
         let lobby = await Lobby.findOne({ isPrivate: false, startCountDown: false, $where: 'this.players.length < 4' })
         const player = req.user ? { user: req.user._id } : { guestName: 'GUEST' }
         
@@ -30,7 +28,8 @@ router.get('/find', guestMiddleware, async (req, res, next) => {
 
         res.send({ lobby: lobby })
 
-        io.to(lobby.code).emit('playerJoined', { lobby })
+        const socket = req.app.get('socketIO')
+        socket.emit('playerJoined', { lobby })
 
         // Just for now
         // if (isNewLobby) {
