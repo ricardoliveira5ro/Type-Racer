@@ -35,7 +35,11 @@ const io = new Server(server, {
         credentials: true
     }
 })
-app.set("io", io);
+
+app.set('socketIO', io);
+io.on('connect', socket => {
+    socket.emit('id', socket.id) // send each client their socket id to use in route socket.broadcast.emit() instead of io.emit()
+})
 
 // API routes
 app.use('/api/users', userRoutes);
