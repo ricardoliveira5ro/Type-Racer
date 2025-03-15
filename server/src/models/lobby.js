@@ -3,8 +3,8 @@ const { randomBytes } = require('crypto')
 
 // Players can be registered users or guests
 const playerSchema = new mongoose.Schema({
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
-    guestName: { type: String, default: null } // guest
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null }, // null = Guest
+    playerName: { type: String, default: 'Guest' }
 }, { _id: false });
 
 const lobbySchema = new mongoose.Schema({
@@ -25,6 +25,11 @@ const lobbySchema = new mongoose.Schema({
     },
     code: {
         type: String
+    },
+    quote: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'Quote'
     }
 }, {
     timestamps: true
@@ -44,11 +49,16 @@ lobbySchema.methods.toJSON = function () {
     const lobbyObject = this.toObject()
 
     delete lobbyObject._id
-    delete lobbyObject.players
     delete lobbyObject.isPrivate
     delete lobbyObject.createdAt
     delete lobbyObject.updatedAt
     delete lobbyObject.__v
+
+    if (lobbyObject.players) {
+        lobbyObject.players = lobbyObject.players.map(p => ({
+            playerName: p.playerName
+        }));
+    }
 
     return lobbyObject
 }

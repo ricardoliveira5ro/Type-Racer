@@ -7,12 +7,13 @@ const router = new express.Router()
 const guestMiddleware = require('../middleware/guest')
 
 const Lobby = require('../models/lobby');
+const Quote = require('../models/quote');
 
 // Search for lobby or create one
 router.get('/find', guestMiddleware, async (req, res, next) => {
     try {
-        let lobby = await Lobby.findOne({ isPrivate: false, startCountDown: false, $where: 'this.players.length < 4' })
-        const player = req.user ? { user: req.user._id } : { guestName: 'GUEST' }
+        let lobby = await Lobby.findOne({ isPrivate: false, startCountDown: false, $where: 'this.players.length < 4' }).populate('quote')
+        const player = req.user ? { user: req.user._id, playerName: req.user.username } : { playerName: 'Guest' }
         
         let isNewLobby = false;
 
@@ -20,11 +21,17 @@ router.get('/find', guestMiddleware, async (req, res, next) => {
             lobby.players.push(player)
         }
         else {
-            lobby = new Lobby({ players: [player] })
+            const quotesCount = await Quote.countDocuments({}, { hint: "_id_" })
+            const random = ~~(Math.random() * quotesCount)
+
+            const quote = await Quote.findOne().skip(random)
+            
+            lobby = new Lobby({ players: [player], quote: quote })
             isNewLobby = true;
         }
 
         await lobby.save()
+        lobby.quote = lobby.quote.toJSON()
 
         res.send({ lobby: lobby })
 
