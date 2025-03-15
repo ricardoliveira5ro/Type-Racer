@@ -6,6 +6,8 @@ const { Server } = require("socket.io");
 
 const globalErrorHandler = require('./middleware/errorHandler')
 
+const seedData = require('./seed/seed');
+
 const userRoutes = require('./routes/user')
 const statsRoutes = require('./routes/stats')
 const lobbyRoutes = require('./routes/lobby')
@@ -28,6 +30,9 @@ app.use(cookieParser())
 app.use(express.json());
 
 const server = http.createServer(app)
+
+// Seed data
+seedData()
 
 const io = new Server(server, {
     cors: {
