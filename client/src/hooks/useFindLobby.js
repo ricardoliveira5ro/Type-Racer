@@ -16,8 +16,10 @@ export const useFindLobby = (isUserLoading, user) => {
 
             if (success) {
                 setLobby({
+                    players: data.lobby.players,
                     startCountDown: data.lobby.startCountDown,
-                    code: data.lobby.code
+                    code: data.lobby.code,
+                    quote: data.lobby.quote
                 })
             }
             setIsLoading(false)

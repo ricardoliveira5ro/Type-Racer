@@ -9,19 +9,19 @@ function Practice() {
 
     const { userInfo, isLoading } = useUserProfile()
 
-    const players = useMemo(() => {
+    const lobby = useMemo(() => {
         if (isLoading) return
 
-        if (userInfo) return [userInfo]
-
-        return [{ username: 'Guest' }]
+        return {
+            players: userInfo ? [{ playerName: userInfo.username }] : [{ playerName: 'Guest' }]
+        }
 
     }, [isLoading, userInfo])
 
     return (
         <div className="flex flex-col px-10 py-7 gap-y-8">
             <Header />
-            {(!isLoading && players) && <Race mode={'Practice'} players={players} />}
+            {(!isLoading && lobby) && <Race mode={'Practice'} lobby={lobby} />}
         </div>
     );
 }
