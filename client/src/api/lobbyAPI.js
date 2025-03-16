@@ -17,6 +17,24 @@ export const LobbyAPI = {
         } catch (error) {
             return { success: false, error };
         }
+    },
+
+    practice: async (isGuest = true, cancel = false) => {
+        try {
+            const response = await api.request({
+                url: '/lobby/practice',
+                method: 'GET',
+                headers: {
+                    'X-Guest': isGuest
+                },
+                signal: cancel ? cancelApiObject[this.practice.name].handleRequestCancellation().signal : undefined,
+            })
+            
+            return { success: true, data: response.data }
+
+        } catch (error) {
+            return { success: false, error };
+        }
     }
 }
 

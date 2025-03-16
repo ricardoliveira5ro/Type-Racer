@@ -1,18 +1,11 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import quotes_data from '../assets/texts/texts.json'
+import React, { createContext, useContext } from 'react';
 
 const AppContext = createContext()
 
 const AppProvider = ({ children }) => {
 
-    const [quotes, setQuotes] = useState([])
-
-    useEffect(() => {
-        setQuotes(quotes_data)
-    }, [])
-
     return (
-        <AppContext.Provider value={{ quotes }}>
+        <AppContext.Provider value={{ }}>
             {children}
         </AppContext.Provider>
     );
