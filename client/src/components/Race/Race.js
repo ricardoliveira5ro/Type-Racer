@@ -12,7 +12,7 @@ import './Race.css'
 
 function Race({ socket, mode, lobby }) {
 
-    const { isRacing, setIsRacing, hasEnded, quote, typedWords, remainingWords, correctWordPart, wrongWordPart, currentWord, userInput, setUserInput, userInputRef, inputBgColor, wpm, accuracy, elapsedTime, setElapsedTime } = useQuoteTyping()
+    const { isRacing, setIsRacing, hasEnded, typedWords, remainingWords, correctWordPart, wrongWordPart, currentWord, userInput, setUserInput, userInputRef, inputBgColor, wpm, accuracy, elapsedTime, setElapsedTime } = useQuoteTyping(lobby.quote)
 
     useEffect(() => {
         let timerId
@@ -72,7 +72,7 @@ function Race({ socket, mode, lobby }) {
                     ))}
 
                     <div className='flex flex-col gap-y-4 mb-4'>
-                        {quote &&
+                        {lobby.quote &&
                             <p className='quote'>
                                 <span className="text-green-600">{typedWords} </span>
                                 <span className="text-green-600">{correctWordPart}</span>
@@ -87,7 +87,7 @@ function Race({ socket, mode, lobby }) {
                     </div>
                 </div>
             </div>
-            {hasEnded && <RaceAnalysis quote={quote} stats={{ wpm, accuracy, elapsedTime, position: 1 }} />}
+            {hasEnded && <RaceAnalysis quote={lobby.quote} stats={{ wpm, accuracy, elapsedTime, position: 1 }} />}
         </div>
     );
 }

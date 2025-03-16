@@ -9,6 +9,27 @@ const guestMiddleware = require('../middleware/guest')
 const Lobby = require('../models/lobby');
 const Quote = require('../models/quote');
 
+// Solo lobby
+router.get('/practice', guestMiddleware, async (req, res, next) => {
+    try {
+        const quotesCount = await Quote.countDocuments({}, { hint: "_id_" })
+        const random = ~~(Math.random() * quotesCount)
+
+        const quote = await Quote.findOne().skip(random)
+
+        const player = req.user ? { user: req.user._id, playerName: req.user.username } : { playerName: 'Guest' }
+        const lobby = new Lobby({ isPrivate: true, startCountDown: true, players: [player], quote: quote })
+
+        await lobby.save()
+        lobby.quote = lobby.quote.toJSON()
+
+        res.send({ lobby: lobby })
+
+    } catch (e) {
+        next(e)
+    }
+})
+
 // Search for lobby or create one
 router.get('/find', guestMiddleware, async (req, res, next) => {
     try {

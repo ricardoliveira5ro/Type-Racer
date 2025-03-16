@@ -1,14 +1,10 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
-import { useAppContext } from "../context/AppContext"
 
-
-export const useQuoteTyping = () => {
+export const useQuoteTyping = (quote) => {
 
     const [isRacing, setIsRacing] = useState(false)
     const [hasEnded, setHasEnded] = useState(false)
  
-    const { quotes } = useAppContext()
-    const [quote, setQuote] = useState(null)
     const [quoteWords, setQuoteWords] = useState(null)
 
     const [userInput, setUserInput] = useState("")
@@ -58,13 +54,10 @@ export const useQuoteTyping = () => {
     )
 
 
-    // Randomize quote
+    // Set quote
     useEffect(() => {
-        const tmpQuote = quotes[~~(Math.random() * quotes.length)]
-
-        setQuote(tmpQuote)
-        tmpQuote && setQuoteWords(tmpQuote.text.split(' '))
-    }, [quotes])
+        quote && setQuoteWords(quote.text.split(' '))
+    }, [quote])
 
 
     // Set word index in quote
@@ -163,7 +156,6 @@ export const useQuoteTyping = () => {
         isRacing,
         setIsRacing,
         hasEnded,
-        quote,
         typedWords,
         remainingWords,
         correctWordPart,
