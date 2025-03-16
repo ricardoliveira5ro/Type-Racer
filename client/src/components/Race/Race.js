@@ -10,7 +10,7 @@ import RaceAnalysis from '../RaceAnalysis/RaceAnalysis';
 
 import './Race.css'
 
-function Race({ socket, mode, players }) {
+function Race({ socket, mode, lobby }) {
 
     const { isRacing, setIsRacing, hasEnded, quote, typedWords, remainingWords, correctWordPart, wrongWordPart, currentWord, userInput, setUserInput, userInputRef, inputBgColor, wpm, accuracy, elapsedTime, setElapsedTime } = useQuoteTyping()
 
@@ -27,12 +27,14 @@ function Race({ socket, mode, players }) {
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
-        socket.on("playerJoined", (data) => {
-            console.log(data);
-        })
-
-        return () => {
-            socket.off("playerJoined");
+        if (socket) {
+            socket.on("playerJoined", (data) => {
+                console.log(data);
+            })
+    
+            return () => {
+                socket.off("playerJoined");
+            }
         }
     }, [])
 
@@ -56,14 +58,14 @@ function Race({ socket, mode, players }) {
                     </div>
                 }
                 <div className='flex flex-col w-full gap-y-6'>
-                    {players?.map((player, index) => (
+                    {lobby.players?.map((player, index) => (
                         <div key={index} className='flex items-center w-full gap-x-6'>
                             <div className='flex flex-col w-full'>
                                 <div id={`div-car-${index + 1}`}>
                                     <img id={`img-car-${index + 1}`} src={carColor(index + 1)} alt='Car' />
                                 </div>
                                 <hr className='horizontal-bar'></hr>
-                                <p>{player.username}</p>
+                                <p>{player.playerName}</p>
                             </div>
                             <p className='min-w-fit'>{wpm} wpm</p>
                         </div>
