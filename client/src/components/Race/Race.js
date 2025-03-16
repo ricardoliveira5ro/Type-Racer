@@ -29,14 +29,14 @@ function Race({ socket, mode, lobby }) {
     useEffect(() => {
         if (socket) {
             socket.on("playerJoined", (data) => {
-                console.log(data);
+                lobby.players = data.lobby.players
             })
     
             return () => {
                 socket.off("playerJoined");
             }
         }
-    }, [])
+    }, [socket])
 
     return (
         <div className='flex flex-col gap-y-8'>
