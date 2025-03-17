@@ -41,10 +41,23 @@ const io = new Server(server, {
     }
 })
 
-app.set('socketIO', io);
-io.on('connect', socket => {
-    socket.emit('id', socket.id) // send each client their socket id to use in route socket.broadcast.emit() instead of io.emit()
+// Socket rooms connection
+io.on('connection', (socket) => {
+    console.log('A user connected:', socket.id);
+
+    // Listen for the client to join a room
+    socket.on('joinRoom', (lobbyCode) => {
+        socket.join(lobbyCode);
+        console.log(`User ${socket.id} joined room ${lobbyCode}`);
+    });
+
+    // Handle disconnection
+    socket.on('disconnect', () => {
+        console.log('User disconnected:', socket.id);
+    });
 })
+
+app.set('socketIO', io);
 
 // API routes
 app.use('/api/users', userRoutes);
