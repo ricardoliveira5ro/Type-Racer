@@ -57,7 +57,7 @@ router.get('/find', guestMiddleware, async (req, res, next) => {
         res.send({ lobby: lobby })
 
         const socket = req.app.get('socketIO')
-        socket.emit('playerJoined', { lobby })
+        socket.to(lobby.code).emit('playerJoined', { lobby })
 
         // Just for now
         // if (isNewLobby) {

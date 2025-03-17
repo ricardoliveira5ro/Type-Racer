@@ -27,16 +27,21 @@ function Race({ socket, mode, lobby }) {
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
-        if (socket) {
-            socket.on("playerJoined", (data) => {
-                lobby.players = data.lobby.players
-            })
-    
-            return () => {
-                socket.off("playerJoined");
+        if (!socket) return
+
+        socket.emit("joinRoom", lobby.code); // Join the room
+
+        socket.on("playerJoined", (data) => {
+            if (data.lobby.code === lobby.code) {
+                lobby.players = data.lobby.players;
+                console.log("New player joined in the room", lobby.code);
             }
+        });
+
+        return () => {
+            socket.off("playerJoined");
         }
-    }, [socket])
+    }, [socket, lobby])
 
     return (
         <div className='flex flex-col gap-y-8'>
