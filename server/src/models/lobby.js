@@ -3,7 +3,7 @@ const { randomBytes } = require('crypto')
 
 // Players can be registered users or guests
 const playerSchema = new mongoose.Schema({
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null }, // null = Guest
+    user: { type: String, default: null }, // null = Guest
     playerName: { type: String, default: 'Guest' }
 }, { _id: false });
 
@@ -53,12 +53,6 @@ lobbySchema.methods.toJSON = function () {
     delete lobbyObject.createdAt
     delete lobbyObject.updatedAt
     delete lobbyObject.__v
-
-    if (lobbyObject.players) {
-        lobbyObject.players = lobbyObject.players.map(p => ({
-            playerName: p.playerName
-        }));
-    }
 
     return lobbyObject
 }

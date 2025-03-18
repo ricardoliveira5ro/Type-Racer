@@ -7,7 +7,7 @@ import { useFindLobby } from "../../hooks/useFindLobby";
 function Multiplayer({ socket }) {
 
     const { userInfo, isLoading: isUserLoading } = useUserProfile()
-    const { lobby, isLoading: isLobbyLoading } = useFindLobby(isUserLoading, userInfo)
+    const { lobby, isLoading: isLobbyLoading } = useFindLobby(isUserLoading, userInfo, socket)
 
     return (
         <div className="flex flex-col px-10 py-7 gap-y-8">
