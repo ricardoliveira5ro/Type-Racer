@@ -1,13 +1,14 @@
 import { api, defineCancelApiObject } from '../configs/axiosConfig'
 
 export const LobbyAPI = {
-    find: async (isGuest = true, cancel = false) => {
+    find: async (isGuest = true, socketID, cancel = false) => {
         try {
             const response = await api.request({
                 url: '/lobby/find',
                 method: 'GET',
                 headers: {
-                    'X-Guest': isGuest
+                    'X-Guest': isGuest,
+                    'X-Socket-ID': socketID
                 },
                 signal: cancel ? cancelApiObject[this.find.name].handleRequestCancellation().signal : undefined,
             })
