@@ -59,17 +59,16 @@ router.get('/find', guestMiddleware, async (req, res, next) => {
         const socket = req.app.get('socketIO')
         socket.to(lobby.code).emit('playerJoined', { lobby })
 
-        // Just for now
-        // if (isNewLobby) {
-        //     startTimeFrameWindowToJoin(lobby._id)
-        // }
+        if (isNewLobby) {
+            startTimeFrameWindowToJoin(lobby._id, socket)
+        }
 
     } catch (e) {
         next(e)
     }
 })
 
-const startTimeFrameWindowToJoin = (lobbyId) => {
+const startTimeFrameWindowToJoin = (lobbyId, socket) => {
     setTimeout(async () => {
         try {
             // Fetch the lobby again because of new players
@@ -80,8 +79,7 @@ const startTimeFrameWindowToJoin = (lobbyId) => {
             lobby.startCountDown = true
             await lobby.save()
 
-            // Notify all the players in the lobby (Send to frontend)
-            // notify()
+            socket.to(lobby.code).emit('countdown-started', { lobby })
 
         } catch (e) {
             console.log(e)
