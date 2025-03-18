@@ -1,30 +1,34 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useQuoteTyping } from '../../hooks/useQuoteTyping';
 
 import { carColor } from '../../utils/carColor'
 
 import CountUpTimer from '../Timer/CountupTimer';
-import CountDownTimer from '../Timer/CountdownTime';
+import CountDownTimer from '../Timer/CountdownTimer';
 import RaceAnalysis from '../RaceAnalysis/RaceAnalysis';
 
 import './Race.css'
 
-function Race({ socket, mode, lobby }) {
+function Race({ socket, mode, initalLobby }) {
 
-    const { isRacing, setIsRacing, hasEnded, typedWords, remainingWords, correctWordPart, wrongWordPart, currentWord, userInput, setUserInput, userInputRef, inputBgColor, wpm, accuracy, elapsedTime, setElapsedTime } = useQuoteTyping(lobby.quote)
+    const { isRacing, setIsRacing, hasEnded, typedWords, remainingWords, correctWordPart, wrongWordPart, currentWord, userInput, setUserInput, userInputRef, inputBgColor, wpm, accuracy, elapsedTime, setElapsedTime } = useQuoteTyping(initalLobby.quote)
+
+    const [lobby, setLobby] = useState(initalLobby)
 
     useEffect(() => {
+        if (!lobby.startCountDown) return 
+
         let timerId
         
         timerId = setTimeout(() => {
             setIsRacing(true)
             userInputRef.current.disabled = false
             userInputRef.current.focus()
-        }, 15000);
+        }, 6000);
     
         return () => clearTimeout(timerId)
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    }, [lobby.startCountDown]) // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         if (!socket) return
@@ -32,11 +36,14 @@ function Race({ socket, mode, lobby }) {
         socket.emit("joinRoom", lobby.code); // Join the room
 
         socket.on("playerJoined", (data) => {
-            if (data.lobby.code === lobby.code) {
-                lobby.players = data.lobby.players;
-                console.log("New player joined in the room", lobby.code);
-            }
+            if (data.lobby.code === lobby.code)
+                setLobby(data.lobby)
         });
+
+        socket.on("countdown-started", (data) => {
+            if (data.lobby.code === lobby.code)
+                setLobby(data.lobby)
+        })
 
         return () => {
             socket.off("playerJoined");
@@ -49,7 +56,7 @@ function Race({ socket, mode, lobby }) {
                 <img src={require('../../assets/images/race-flag.webp')} alt='Race flag' />
                 <p className='text-white text-2xl'>{mode}</p>
             </div>
-            {(!isRacing && !typedWords) && <CountDownTimer />}
+            {(!isRacing && !typedWords) && <CountDownTimer lobby={lobby} />}
             <div className='flex flex-col justify-between items-center bg-white rounded-md px-5 py-3 w-full gap-y-4'>
                 {isRacing &&
                     <div className='flex justify-between w-full'>

@@ -16,11 +16,13 @@ function TrafficLight({
     initialColor = 'red',
     config,
     layout = 'vertical',
+    startCountdown
 }) {
-    const [currentColor, setCurrentColor] =
-        useState(initialColor);
+    const [currentColor, setCurrentColor] = useState(initialColor);
 
     useEffect(() => {
+        if (!startCountdown) return;
+
         if (!config[currentColor]) return;
 
         const { duration, next } = config[currentColor];
@@ -32,7 +34,7 @@ function TrafficLight({
 
             return () => clearTimeout(timerId);
         }
-    }, [currentColor, config]);
+    }, [currentColor, config, startCountdown]);
 
     return (
         <div
@@ -62,12 +64,12 @@ function TrafficLight({
 const config = {
     red: {
         backgroundColor: 'red',
-        duration: 10000,
+        duration: 3000,
         next: 'yellow',
     },
     yellow: {
         backgroundColor: 'yellow',
-        duration: 5000,
+        duration: 3000,
         next: 'green',
     },
     green: {
@@ -79,12 +81,20 @@ const config = {
 
 // Code by: https://www.greatfrontend.com/questions/user-interface/traffic-light/solution
 
-function CountDownTimer() {
+function CountDownTimer({ lobby }) {
+
+    const [startCountdown, setStartCountdown] = useState(false);
+
+    useEffect(() => {
+        if (lobby.startCountDown) {
+            setStartCountdown(true);
+        }
+    }, [lobby.startCountDown]);
 
     return (
         <div className='absolute z-50 left-1/2 top-1/3 text-center'>
             <div className="wrapper">
-                <TrafficLight config={config} />
+                <TrafficLight config={config} startCountdown={startCountdown} />
             </div>
         </div>
     )
