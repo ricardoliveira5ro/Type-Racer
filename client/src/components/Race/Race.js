@@ -10,11 +10,11 @@ import RaceAnalysis from '../RaceAnalysis/RaceAnalysis';
 
 import './Race.css'
 
-function Race({ socket, mode, initalLobby }) {
+function Race({ socket, mode, initialLobby }) {
 
-    const { isRacing, setIsRacing, hasEnded, typedWords, remainingWords, correctWordPart, wrongWordPart, currentWord, userInput, setUserInput, userInputRef, inputBgColor, wpm, accuracy, elapsedTime, setElapsedTime } = useQuoteTyping(initalLobby.quote)
+    const { isRacing, setIsRacing, hasEnded, typedWords, remainingWords, correctWordPart, wrongWordPart, currentWord, userInput, setUserInput, userInputRef, inputBgColor, wpm, accuracy, elapsedTime, setElapsedTime } = useQuoteTyping(initialLobby.quote)
 
-    const [lobby, setLobby] = useState(initalLobby)
+    const [lobby, setLobby] = useState(initialLobby)
 
     useEffect(() => {
         if (!lobby.startCountDown) return 
