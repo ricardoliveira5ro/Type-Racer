@@ -4,7 +4,9 @@ const { randomBytes } = require('crypto')
 // Players can be registered users or guests
 const playerSchema = new mongoose.Schema({
     user: { type: String, default: null }, // null = Guest
-    playerName: { type: String, default: 'Guest' }
+    playerName: { type: String, default: 'Guest' },
+    wpm: { type: Number, default: 0 },
+    wordIndex: { type: Number, default: 0 }
 }, { _id: false });
 
 const lobbySchema = new mongoose.Schema({

@@ -17,7 +17,7 @@ router.get('/practice', guestMiddleware, async (req, res, next) => {
 
         const quote = await Quote.findOne().skip(random)
 
-        const player = { user: req.headers['x-socket-id'], playerName: req.user?.username || 'Guest' }
+        const player = { user: req.headers['x-socket-id'], playerName: req.user?.username || 'Guest', wpm: 0, wordIndex: 0 }
         const lobby = new Lobby({ isPrivate: true, startCountDown: true, players: [player], quote: quote })
 
         await lobby.save()
@@ -34,7 +34,7 @@ router.get('/practice', guestMiddleware, async (req, res, next) => {
 router.get('/find', guestMiddleware, async (req, res, next) => {
     try {
         let lobby = await Lobby.findOne({ isPrivate: false, startCountDown: false, $where: 'this.players.length < 4' }).populate('quote')
-        const player = { user: req.headers['x-socket-id'], playerName: req.user?.username || 'Guest' }
+        const player = { user: req.headers['x-socket-id'], playerName: req.user?.username || 'Guest', wpm: 0, wordIndex: 0 }
         
         let isNewLobby = false;
 

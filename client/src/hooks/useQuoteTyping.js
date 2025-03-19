@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
 
-export const useQuoteTyping = (quote) => {
+export const useQuoteTyping = (quote, playerIndex) => {
 
     const [isRacing, setIsRacing] = useState(false)
     const [hasEnded, setHasEnded] = useState(false)
@@ -76,15 +76,15 @@ export const useQuoteTyping = (quote) => {
     // Wait until it renders and set distance to move after each word
     useLayoutEffect(() => {
         setTimeout(() => {
-            const carDiv = document.getElementById('div-car-1')
-            const carImg = document.getElementById('img-car-1')
+            const carDiv = document.getElementById(`div-car-${playerIndex + 1}`)
+            const carImg = document.getElementById(`img-car-${playerIndex + 1}`)
             if (!carDiv || !carImg || !quoteWords) return
 
             const spaceAvailable = (carDiv.offsetWidth - (carImg.offsetWidth || 64))
             setDistanceToMove(~~(spaceAvailable / quoteWords.length))
         }, 2000)
 
-    }, [quoteWords])
+    }, [quoteWords, playerIndex])
 
 
     // Evaluate userInput with current word
@@ -131,12 +131,12 @@ export const useQuoteTyping = (quote) => {
 
     // Translate car
     useEffect(() => {
-        const carImg = document.getElementById('img-car-1')
+        const carImg = document.getElementById(`img-car-${playerIndex + 1}`)
         if (!carImg || !typedWords || !distanceToMove) return
 
         carImg.style.transform = `translateX(${(distanceToMove * wordIndex)}px)`
 
-    }, [typedWords, distanceToMove, wordIndex])
+    }, [typedWords, distanceToMove, wordIndex, playerIndex])
 
 
     // End game
@@ -156,6 +156,7 @@ export const useQuoteTyping = (quote) => {
         isRacing,
         setIsRacing,
         hasEnded,
+        wordIndex,
         typedWords,
         remainingWords,
         correctWordPart,
@@ -169,5 +170,6 @@ export const useQuoteTyping = (quote) => {
         accuracy,
         elapsedTime,
         setElapsedTime,
+        distanceToMove
     }
 }
