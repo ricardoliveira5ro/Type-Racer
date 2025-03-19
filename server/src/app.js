@@ -51,6 +51,21 @@ io.on('connection', (socket) => {
         console.log(`User ${socket.id} joined room ${lobbyCode}`);
     });
 
+    // Listen for words typed
+    socket.on("word-typed", (data) => {
+        const { lobby, update } = data
+
+        const updatedPlayers = lobby.players.map(player =>
+            player.user === update.socketID
+                ? { ...player, wpm: update.wpm, wordIndex: update.wordIndex }
+                : player
+        );
+
+        const updatedLobby = { ...lobby, players: updatedPlayers }
+
+        socket.to(lobby.code).emit("player-progress", { lobby: updatedLobby })
+    })
+
     // Handle disconnection
     socket.on('disconnect', () => {
         console.log('User disconnected:', socket.id);

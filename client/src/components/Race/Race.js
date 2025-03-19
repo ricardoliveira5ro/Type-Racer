@@ -12,7 +12,8 @@ import './Race.css'
 
 function Race({ socket, mode, initialLobby }) {
 
-    const { isRacing, setIsRacing, hasEnded, typedWords, remainingWords, correctWordPart, wrongWordPart, currentWord, userInput, setUserInput, userInputRef, inputBgColor, wpm, accuracy, elapsedTime, setElapsedTime } = useQuoteTyping(initialLobby.quote)
+    const { isRacing, setIsRacing, hasEnded, wordIndex, typedWords, remainingWords, correctWordPart, wrongWordPart, currentWord, userInput, setUserInput, userInputRef, inputBgColor, wpm, accuracy, elapsedTime, setElapsedTime, distanceToMove } 
+            = useQuoteTyping(initialLobby.quote, initialLobby.players.findIndex(p => p.user === socket.id))
 
     const [lobby, setLobby] = useState(initialLobby)
 
@@ -45,10 +46,38 @@ function Race({ socket, mode, initialLobby }) {
                 setLobby(data.lobby)
         })
 
+        socket.on("player-progress", (data) => {
+            if (data.lobby.code === lobby.code) {
+                setLobby(data.lobby)
+
+                data.lobby.players.forEach((player, index) => {
+                    const carImg = document.getElementById(`img-car-${index + 1}`)
+                    if (!carImg || !distanceToMove) return
+
+                    carImg.style.transform = `translateX(${(distanceToMove * player.wordIndex)}px)`
+                });
+            }
+        })
+
         return () => {
             socket.off("playerJoined");
+            socket.off("countdown-started");
+            socket.off("player-progress");
         }
-    }, [socket, lobby])
+    }, [socket, lobby, distanceToMove])
+
+    useEffect(() => {
+        if (!socket) return
+
+        const update = {
+            socketID: socket.id,
+            wpm: wpm,
+            wordIndex: wordIndex
+        }
+
+        socket.emit("word-typed", { lobby, update });
+
+    }, [socket, wpm]) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div className='flex flex-col gap-y-8'>
@@ -77,9 +106,9 @@ function Race({ socket, mode, initialLobby }) {
                                     <img id={`img-car-${index + 1}`} src={carColor(index + 1)} alt='Car' />
                                 </div>
                                 <hr className='horizontal-bar'></hr>
-                                <p>{player.playerName}</p>
+                                <p>{socket.id === player.user ? 'You' : player.playerName}</p>
                             </div>
-                            <p className='min-w-fit'>{wpm} wpm</p>
+                            <p className='min-w-fit'>{socket.id === player.user ? wpm : player.wpm} wpm</p>
                         </div>
                     ))}
 
