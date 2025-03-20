@@ -13,7 +13,7 @@ function Multiplayer({ socket }) {
         <div className="flex flex-col px-10 py-7 gap-y-8">
             <Header />
             {(!isUserLoading && !isLobbyLoading && lobby) && 
-                <Race socket={socket} mode={'Multiplayer'} initialLobby={lobby} />
+                <Race socket={socket} mode={'Multiplayer'} initialLobby={lobby} isGuest={userInfo ? false : true} />
             }
         </div>
     );

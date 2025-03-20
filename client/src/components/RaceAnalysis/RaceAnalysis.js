@@ -23,7 +23,7 @@ function RaceAnalysis({ quote, stats }) {
                     <div className="race-stats-container flex flex-wrap items-center gap-x-8 gap-y-4">
                         <div className='flex items-center gap-x-2'>
                             <Keyboard color='#86C232' size={28} />
-                            <span>{stats?.wpm} wpm</span>
+                            <span>{~~stats?.wpm} wpm</span>
                         </div>
                         <div className='flex items-center gap-x-2'>
                             <Clock color='#86C232' size={28} />
