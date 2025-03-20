@@ -37,7 +37,25 @@ export const LobbyAPI = {
         } catch (error) {
             return { success: false, error };
         }
-    }
+    },
+
+    updateOrDeleteOnUserLeave: async (socketID, code, cancel = false) => {
+        try {
+            await api.request({
+                url: `/lobby/${code}`,
+                method: 'POST',
+                headers: {
+                    'X-Socket-ID': socketID
+                },
+                signal: cancel ? cancelApiObject[this.updateOrDeleteOnUserLeave.name].handleRequestCancellation().signal : undefined,
+            })
+            
+            return { success: true }
+
+        } catch (error) {
+            return { success: false, error };
+        }
+    },
 }
 
 const cancelApiObject = defineCancelApiObject(LobbyAPI)

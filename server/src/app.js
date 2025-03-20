@@ -12,6 +12,8 @@ const userRoutes = require('./routes/user')
 const statsRoutes = require('./routes/stats')
 const lobbyRoutes = require('./routes/lobby')
 
+const Lobby = require('./models/lobby')
+
 require("dotenv").config({ path: path.resolve(__dirname, './config/.env.dev') });
 require('./db/mongoose')
 
@@ -43,12 +45,10 @@ const io = new Server(server, {
 
 // Socket rooms connection
 io.on('connection', (socket) => {
-    console.log('A user connected:', socket.id);
 
     // Listen for the client to join a room
     socket.on('joinRoom', (lobbyCode) => {
         socket.join(lobbyCode);
-        console.log(`User ${socket.id} joined room ${lobbyCode}`);
     });
 
     // Listen for words typed
@@ -67,8 +67,24 @@ io.on('connection', (socket) => {
     })
 
     // Handle disconnection
-    socket.on('disconnect', () => {
-        console.log('User disconnected:', socket.id);
+    socket.on('disconnect', async () => {
+        const lobby = await Lobby.findOne({ "players.user": socket.id })
+        
+        if (!lobby) return
+
+        if (lobby.players.filter(p => !p.hasLeft).length <= 1) {
+            await Lobby.deleteOne({ code: lobby.code })
+
+        } else {
+            const updatedPlayers = lobby.players.map(player =>
+                player.user === socket.id
+                    ? { ...player, hasLeft: true }
+                    : player
+            );
+
+            lobby.players = updatedPlayers
+            await lobby.save()
+        }
     });
 })
 

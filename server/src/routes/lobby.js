@@ -87,4 +87,29 @@ const startTimeFrameWindowToJoin = (lobbyId, socket) => {
     }, 10000) // 10 seconds
 }
 
+router.post('/:code', async (req, res, next) => {
+    const socketID = req.headers['x-socket-id']
+    const code = req.params.code
+
+    const lobby = await Lobby.findOne({ code: code })
+
+    if (!lobby) return
+
+    if (lobby.players.filter(p => !p.hasLeft).length <= 1) {
+        await Lobby.deleteOne({ code: code })
+
+    } else {
+        const updatedPlayers = lobby.players.map(player =>
+            player.user === socketID
+                ? { ...player, hasLeft: true }
+                : player
+        );
+
+        lobby.players = updatedPlayers
+        await lobby.save()
+    }
+
+    res.send({ message: "Successfully deleted or updated" })
+})
+
 module.exports = router
