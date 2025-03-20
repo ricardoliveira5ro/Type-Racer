@@ -7,7 +7,8 @@ const playerSchema = new mongoose.Schema({
     playerName: { type: String, default: 'Guest' },
     wpm: { type: Number, default: 0 },
     wordIndex: { type: Number, default: 0 },
-    hasFinished: { type: Boolean, default: false }
+    hasFinished: { type: Boolean, default: false },
+    hasLeft: { type: Boolean, default: false }
 }, { _id: false });
 
 const lobbySchema = new mongoose.Schema({

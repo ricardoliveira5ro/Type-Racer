@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 
 import { StatsAPI } from '../../api/statsAPI'
+import { LobbyAPI } from '../../api/lobbyAPI'
+
 import { useQuoteTyping } from '../../hooks/useQuoteTyping';
 
 import { carColor } from '../../utils/carColor'
@@ -116,6 +118,16 @@ function Race({ socket, mode, initialLobby, isGuest }) {
         updateStats()
 
     }, [hasEnded]) // eslint-disable-line react-hooks/exhaustive-deps
+
+    // Leaving lobby (not closing socket)
+    useEffect(() => {
+        return () => {
+            const updateOrDelete = async () => {
+                await LobbyAPI.updateOrDeleteOnUserLeave(socket.id, lobby.code)
+            }
+            updateOrDelete()
+        }
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div className='flex flex-col gap-y-8'>
