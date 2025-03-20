@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+import { StatsAPI } from '../../api/statsAPI'
 import { useQuoteTyping } from '../../hooks/useQuoteTyping';
 
 import { carColor } from '../../utils/carColor'
@@ -10,12 +11,13 @@ import RaceAnalysis from '../RaceAnalysis/RaceAnalysis';
 
 import './Race.css'
 
-function Race({ socket, mode, initialLobby }) {
+function Race({ socket, mode, initialLobby, isGuest }) {
 
     const { isRacing, setIsRacing, hasEnded, wordIndex, typedWords, remainingWords, correctWordPart, wrongWordPart, currentWord, userInput, setUserInput, userInputRef, inputBgColor, wpm, accuracy, elapsedTime, setElapsedTime, distanceToMove } 
             = useQuoteTyping(initialLobby.quote, initialLobby.players.findIndex(p => p.user === socket.id))
 
     const [lobby, setLobby] = useState(initialLobby)
+    const [finalPosition, setFinalPosition] = useState(1)
 
     useEffect(() => {
         if (!lobby.startCountDown) return 
@@ -75,9 +77,45 @@ function Race({ socket, mode, initialLobby }) {
             wordIndex: wordIndex
         }
 
+        // Update current client/sender
+        setLobby(prevState => ({
+            ...prevState,
+            players: prevState.players.map(player => player.user === socket.id ? 
+                { ...player, wpm: update.wpm, wordIndex: update.wordIndex, hasFinished: hasEnded } : player
+            )
+        }))
+
         socket.emit("word-typed", { lobby, update });
 
     }, [socket, wpm]) // eslint-disable-line react-hooks/exhaustive-deps
+
+    useEffect(() => {
+        if (!hasEnded || isGuest || mode === 'Practice') return
+
+        // Position bug
+        console.log(lobby.players)
+        const filteredPlayers = lobby.players.filter(player => (player.hasFinished || player.user === socket.id))
+        const sortedPlayers = filteredPlayers.sort((a, b) => b.wpm - a.wpm)
+
+        const position = sortedPlayers.findIndex(player => player.user === socket.id) + 1
+        setFinalPosition(position)
+
+        console.log(filteredPlayers)
+        console.log(position)
+
+        const formData = {
+            wpm: wpm,
+            accuracy: accuracy,
+            position: position
+        }
+
+        const updateStats = async () => {
+            await StatsAPI.postRaceStats(formData)
+        }
+
+        updateStats()
+
+    }, [hasEnded]) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div className='flex flex-col gap-y-8'>
@@ -108,7 +146,7 @@ function Race({ socket, mode, initialLobby }) {
                                 <hr className='horizontal-bar'></hr>
                                 <p>{socket.id === player.user ? 'You' : player.playerName}</p>
                             </div>
-                            <p className='min-w-fit'>{socket.id === player.user ? wpm : player.wpm} wpm</p>
+                            <p className='min-w-fit'>{socket.id === player.user ? ~~wpm : ~~player.wpm} wpm</p>
                         </div>
                     ))}
 
@@ -128,7 +166,7 @@ function Race({ socket, mode, initialLobby }) {
                     </div>
                 </div>
             </div>
-            {hasEnded && <RaceAnalysis quote={lobby.quote} stats={{ wpm, accuracy, elapsedTime, position: 1 }} />}
+            {hasEnded && <RaceAnalysis quote={initialLobby.quote} stats={{ wpm, accuracy, elapsedTime, position: finalPosition }} />}
         </div>
     );
 }

@@ -13,7 +13,7 @@ function Practice() {
         <div className="flex flex-col px-10 py-7 gap-y-8">
             <Header />
             {(!isUserLoading && !isLobbyLoading && lobby) && 
-                <Race mode={'Practice'} initialLobby={lobby} />
+                <Race mode={'Practice'} initialLobby={lobby} isGuest={userInfo ? false : true} />
             }
         </div>
     );

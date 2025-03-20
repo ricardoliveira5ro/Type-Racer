@@ -113,7 +113,7 @@ export const useQuoteTyping = (quote, playerIndex) => {
         const wordsTyped = typedWords?.length / 5 // Convert to words (5 chars = 1 word)
         const timeMinutes = elapsedTime / 1000 / 60
 
-        setWpm(~~(wordsTyped / timeMinutes))
+        setWpm(wordsTyped / timeMinutes)
     }, [typedWords]) // eslint-disable-line react-hooks/exhaustive-deps
 
 
