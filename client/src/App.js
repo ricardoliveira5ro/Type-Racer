@@ -26,7 +26,7 @@ function App() {
           <Route path='/' element={<Navigate to='/home' replace />} />
           <Route path='/home' element={<Home />} />
           <Route path='/auth' element={<Authentication />} />
-          <Route path='/practice' element={<Practice />} />
+          <Route path='/practice' element={<Practice socket={socket} />} />
           <Route path='/multiplayer' element={<Multiplayer socket={socket} />} />
 
           {/* Protected routes */}
