@@ -74,7 +74,8 @@ function Race({ socket, mode, initialLobby, isGuest }) {
         const update = {
             socketID: socket.id,
             wpm: wpm,
-            wordIndex: wordIndex
+            wordIndex: wordIndex,
+            hasFinished: hasEnded
         }
 
         // Update current client/sender
@@ -90,18 +91,17 @@ function Race({ socket, mode, initialLobby, isGuest }) {
     }, [socket, wpm]) // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
-        if (!hasEnded || isGuest || mode === 'Practice') return
+        const finalLobby = lobby.players.map(player => player.user === socket.id ? 
+                                                { ...player, hasFinished: true } : player
+                                            )
 
-        // Position bug
-        console.log(lobby.players)
-        const filteredPlayers = lobby.players.filter(player => (player.hasFinished || player.user === socket.id))
+        const filteredPlayers = finalLobby.filter(player => (player.hasFinished || player.user === socket.id))
         const sortedPlayers = filteredPlayers.sort((a, b) => b.wpm - a.wpm)
 
         const position = sortedPlayers.findIndex(player => player.user === socket.id) + 1
         setFinalPosition(position)
 
-        console.log(filteredPlayers)
-        console.log(position)
+        if (!hasEnded || isGuest || mode === 'Practice') return
 
         const formData = {
             wpm: wpm,

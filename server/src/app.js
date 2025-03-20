@@ -57,7 +57,7 @@ io.on('connection', (socket) => {
 
         const updatedPlayers = lobby.players.map(player =>
             player.user === update.socketID
-                ? { ...player, wpm: update.wpm, wordIndex: update.wordIndex }
+                ? { ...player, wpm: update.wpm, wordIndex: update.wordIndex, hasFinished: update.hasFinished }
                 : player
         );
 
