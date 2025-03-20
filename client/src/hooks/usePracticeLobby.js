@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { LobbyAPI } from '../api/lobbyAPI';
 
-export const usePracticeLobby = (isUserLoading, user) => {
+export const usePracticeLobby = (isUserLoading, user, socket) => {
     const [isLoading, setIsLoading] = useState(true)
     const [lobby, setLobby] = useState(null)
 
@@ -12,7 +12,7 @@ export const usePracticeLobby = (isUserLoading, user) => {
             setIsLoading(true)
 
             const isGuest = user ? false : true
-            const { success, data } = await LobbyAPI.practice(isGuest)
+            const { success, data } = await LobbyAPI.practice(isGuest, socket.id)
 
             if (success) {
                 setLobby({
@@ -26,7 +26,7 @@ export const usePracticeLobby = (isUserLoading, user) => {
         };
 
         fetchLobby();
-    }, [user, isUserLoading]);
+    }, [user, isUserLoading, socket.id]);
 
     return { lobby, isLoading }
 };

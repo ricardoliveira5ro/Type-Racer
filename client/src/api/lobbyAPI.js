@@ -20,13 +20,14 @@ export const LobbyAPI = {
         }
     },
 
-    practice: async (isGuest = true, cancel = false) => {
+    practice: async (isGuest = true, socketID, cancel = false) => {
         try {
             const response = await api.request({
                 url: '/lobby/practice',
                 method: 'GET',
                 headers: {
-                    'X-Guest': isGuest
+                    'X-Guest': isGuest,
+                    'X-Socket-ID': socketID
                 },
                 signal: cancel ? cancelApiObject[this.practice.name].handleRequestCancellation().signal : undefined,
             })
