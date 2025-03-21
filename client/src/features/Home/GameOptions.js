@@ -21,13 +21,13 @@ function GameOptions() {
                         </div>
                         <p className='text-white'>Train at your own pace. Improve your speed and accuracy with focused practice sessions tailored to your progress.</p>
                     </Link>
-                    <div className="bg-[var(--green)] rounded-md px-5 py-3">
+                    <Link to={'/custom'} className="bg-[var(--green)] rounded-md px-5 py-3">
                         <div className="flex items-center gap-x-2 mb-2">
                             <span className='text-lg'>Custom</span>
                             <Wand size={22} />
                         </div>
                         <p>Create a private game and invite your friends to a personalized typing showdown. Perfect for friendly competitions!</p>
-                    </div>
+                    </Link>
                 </div>
             </div>
         </div>
