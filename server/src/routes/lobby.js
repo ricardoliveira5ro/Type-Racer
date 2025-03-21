@@ -9,6 +9,8 @@ const guestMiddleware = require('../middleware/guest')
 const Lobby = require('../models/lobby');
 const Quote = require('../models/quote');
 
+const { handleOnUserLeave } = require('../utils/functions')
+
 // Solo lobby
 router.get('/practice', guestMiddleware, async (req, res, next) => {
     try {
@@ -41,7 +43,7 @@ router.get('/find', guestMiddleware, async (req, res, next) => {
         }).populate('quote')
 
         const player = { user: req.headers['x-socket-id'], playerName: req.user?.username || 'Guest', wpm: 0, wordIndex: 0 }
-        
+
         let isNewLobby = false;
 
         if (lobby) {
@@ -101,19 +103,7 @@ router.post('/:code', async (req, res, next) => {
 
     if (!lobby) return
 
-    if (lobby.players.filter(p => !p.hasLeft).length <= 1) {
-        await Lobby.deleteOne({ code: code })
-
-    } else {
-        const updatedPlayers = lobby.players.map(player =>
-            player.user === socketID
-                ? { ...player, hasLeft: true }
-                : player
-        );
-
-        lobby.players = updatedPlayers
-        await lobby.save()
-    }
+    await handleOnUserLeave(lobby, socketID)
 
     res.send({ message: "Successfully deleted or updated" })
 })

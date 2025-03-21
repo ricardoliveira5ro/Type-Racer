@@ -14,6 +14,8 @@ const lobbyRoutes = require('./routes/lobby')
 
 const Lobby = require('./models/lobby')
 
+const { handleOnUserLeave } = require('./utils/functions')
+
 require("dotenv").config({ path: path.resolve(__dirname, './config/.env.dev') });
 require('./db/mongoose')
 
@@ -68,22 +70,10 @@ io.on('connection', (socket) => {
 
     // Handle disconnection
     socket.on('disconnect', async () => {
-        const lobby = await Lobby.findOne({ "players.user": socket.id })
-        
-        if (!lobby) return
+        const lobbies = await Lobby.find({ "players.user": socket.id })
 
-        if (lobby.players.filter(p => !p.hasLeft).length <= 1) {
-            await Lobby.deleteOne({ code: lobby.code })
-
-        } else {
-            const updatedPlayers = lobby.players.map(player =>
-                player.user === socket.id
-                    ? { ...player, hasLeft: true }
-                    : player
-            );
-
-            lobby.players = updatedPlayers
-            await lobby.save()
+        for (const lobby of lobbies) {
+            await handleOnUserLeave(lobby, socket.id)
         }
     });
 })
