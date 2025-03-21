@@ -33,7 +33,13 @@ router.get('/practice', guestMiddleware, async (req, res, next) => {
 // Search for lobby or create one
 router.get('/find', guestMiddleware, async (req, res, next) => {
     try {
-        let lobby = await Lobby.findOne({ isPrivate: false, startCountDown: false, $where: 'this.players.length < 4' }).populate('quote')
+        let lobby = await Lobby.findOne({ 
+            isPrivate: false, 
+            startCountDown: false, 
+            players: { $not: { $elemMatch: { user: req.headers['x-socket-id'] } } }, 
+            $where: 'this.players.length < 4' 
+        }).populate('quote')
+
         const player = { user: req.headers['x-socket-id'], playerName: req.user?.username || 'Guest', wpm: 0, wordIndex: 0 }
         
         let isNewLobby = false;
