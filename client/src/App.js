@@ -12,6 +12,7 @@ import Profile from "./pages/profile/Profile";
 import ResetPassword from "./pages/reset/ResetPassword";
 import Practice from "./pages/practice/Practice";
 import Multiplayer from "./pages/multiplayer/Multiplayer";
+import Custom from "./pages/custom/Custom";
 
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -28,6 +29,7 @@ function App() {
           <Route path='/auth' element={<Authentication />} />
           <Route path='/practice' element={<Practice socket={socket} />} />
           <Route path='/multiplayer' element={<Multiplayer socket={socket} />} />
+          <Route path='/custom' element={<Custom />} />
 
           {/* Protected routes */}
           <Route path='/' element={<ProtectedRoute />}>
