@@ -182,5 +182,16 @@ router.post('/reset', resetMiddleware, async (req, res, next) => {
     }
 })
 
+// Online players
+router.get('/players', async (req, res, next) => {
+    try {
+        const socket = req.app.get('socketIO')
+
+        res.send({ players: socket.engine.clientsCount })
+
+    } catch (e) {
+        next(e)
+    }
+})
 
 module.exports = router

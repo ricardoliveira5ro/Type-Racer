@@ -142,6 +142,21 @@ export const UsersAPI = {
         } catch (error) {
             return { success: false, error }
         }
+    },
+
+    onlinePlayers: async (cancel = false) => {
+        try {
+            const response = await api.request({
+                url: '/users/players',
+                method: 'GET',
+                signal: cancel ? cancelApiObject[this.onlinePlayers.name].handleRequestCancellation().signal : undefined
+            })
+
+            return { success: true, data: response.data }
+            
+        } catch (error) {
+            return { success: false, error }
+        }
     }
 }
 
