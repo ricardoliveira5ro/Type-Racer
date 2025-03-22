@@ -11,6 +11,8 @@ const Quote = require('../models/quote');
 
 const { handleOnUserLeave } = require('../utils/functions')
 
+const AppError = require('../errors/Error')
+
 // Solo lobby
 router.get('/practice', guestMiddleware, async (req, res, next) => {
     try {
@@ -106,6 +108,46 @@ router.post('/:code', async (req, res, next) => {
     await handleOnUserLeave(lobby, socketID)
 
     res.send({ message: "Successfully deleted or updated" })
+})
+
+router.get('/custom', guestMiddleware, async (req, res, next) => {
+    try {
+        const player = { user: req.headers['x-socket-id'], playerName: req.user?.username || 'Guest', wpm: 0, wordIndex: 0 }
+        let lobby
+
+        if (req.params.create) {
+            const quotesCount = await Quote.countDocuments({}, { hint: "_id_" })
+            const random = ~~(Math.random() * quotesCount)
+
+            const quote = await Quote.findOne().skip(random)
+
+            lobby = new Lobby({ players: [player], quote: quote, isPrivate: true })
+
+        } else {
+            lobby = await Lobby.findOne({ code: req.params.code })
+
+            if (!lobby) 
+                throw new AppError("Lobby not found", 404)
+    
+            if (lobby.startCountDown) {
+                throw new AppError("The race has started", 401)
+            }
+    
+            if (lobby.players.length >= 4) {
+                throw new AppError("The lobby is full", 401)
+            }
+    
+            lobby.players.push(player)
+        }
+
+        await lobby.save()
+        lobby.quote = lobby.quote.toJSON()
+
+        res.send({ lobby: lobby })
+
+    } catch (e) {
+        next(e)
+    }
 })
 
 module.exports = router
