@@ -1,5 +1,8 @@
+import { useOnlinePlayers } from "../../hooks/useOnlinePlayers"
 
 function CustomJoinLobby () {
+
+    const { isLoading: isOnlinePlayersLoading, onlinePlayers } = useOnlinePlayers()
 
     return (
         <div className="flex flex-col px-4 py-3 items-center justify-center bg-white rounded-md gap-y-5 min-w-96">
@@ -11,7 +14,7 @@ function CustomJoinLobby () {
             </div>
             <div className="flex items-center gap-x-2 w-full px-0.5 mb-1">
                 <span className="w-3 h-3 bg-green-500 rounded-full"></span>
-                <p>5 Online Players</p>
+                {!isOnlinePlayersLoading && <p>{onlinePlayers} Online Players</p>}
             </div>
         </div>
     )
