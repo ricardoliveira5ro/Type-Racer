@@ -6,6 +6,7 @@ import { useAlert } from "../../hooks/useAlert"
 import Header from "../../components/Header/Header"
 import Alert from "../../components/Alerts/Alert"
 import CustomJoinLobby from "../../features/custom/JoinLobby"
+import CustomLobby from "../../features/custom/Lobby"
 
 import { LobbyAPI } from "../../api/lobbyAPI"
 
@@ -35,6 +36,7 @@ function Custom ({ socket }) {
                 <Alert text={alertText} type={alertType} onDismissAlert={() => dismissAlert()} />
             }
             {!lobby && <CustomJoinLobby loadLobby={loadLobby} />}
+            {lobby && <CustomLobby socket={socket} lobby={lobby} />}
         </div>
     )
 }
