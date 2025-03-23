@@ -57,13 +57,14 @@ export const LobbyAPI = {
         }
     },
 
-    custom: async (socketID, params, cancel = false) => {
+    custom: async (socketID, params, isGuest = true, cancel = false) => {
         try {
             const response = await api.request({
                 url: `/lobby/custom`,
                 method: 'GET',
                 params: params,
                 headers: {
+                    'X-Guest': isGuest,
                     'X-Socket-ID': socketID
                 },
                 signal: cancel ? cancelApiObject[this.custom.name].handleRequestCancellation().signal : undefined,

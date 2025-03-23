@@ -18,4 +18,14 @@ const handleOnUserLeave = async (lobby, socketID) => {
     }
 }
 
-module.exports = { handleOnUserLeave }
+const parseBool = (param) => {
+    return !(
+        param === "false" ||
+        param === "0" ||
+        param === "" ||
+        param === undefined ||
+        param === null
+    )
+}
+
+module.exports = { handleOnUserLeave, parseBool }

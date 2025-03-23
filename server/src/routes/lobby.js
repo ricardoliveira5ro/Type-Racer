@@ -9,7 +9,7 @@ const guestMiddleware = require('../middleware/guest')
 const Lobby = require('../models/lobby');
 const Quote = require('../models/quote');
 
-const { handleOnUserLeave } = require('../utils/functions')
+const { handleOnUserLeave, parseBool } = require('../utils/functions')
 
 const AppError = require('../errors/Error')
 
@@ -115,7 +115,7 @@ router.get('/custom', guestMiddleware, async (req, res, next) => {
         const player = { user: req.headers['x-socket-id'], playerName: req.user?.username || 'Guest', wpm: 0, wordIndex: 0 }
         let lobby
 
-        if (req.params.create) {
+        if (parseBool(req.query.create)) {
             const quotesCount = await Quote.countDocuments({}, { hint: "_id_" })
             const random = ~~(Math.random() * quotesCount)
 
@@ -124,7 +124,7 @@ router.get('/custom', guestMiddleware, async (req, res, next) => {
             lobby = new Lobby({ players: [player], quote: quote, isPrivate: true })
 
         } else {
-            lobby = await Lobby.findOne({ code: req.params.code })
+            lobby = await Lobby.findOne({ code: req.query.code.toLowerCase() })
 
             if (!lobby) 
                 throw new AppError("Lobby not found", 404)
