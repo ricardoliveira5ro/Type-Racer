@@ -29,7 +29,7 @@ function App() {
           <Route path='/auth' element={<Authentication />} />
           <Route path='/practice' element={<Practice socket={socket} />} />
           <Route path='/multiplayer' element={<Multiplayer socket={socket} />} />
-          <Route path='/custom' element={<Custom />} />
+          <Route path='/custom' element={<Custom socket={socket} />} />
 
           {/* Protected routes */}
           <Route path='/' element={<ProtectedRoute />}>
