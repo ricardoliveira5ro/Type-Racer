@@ -53,7 +53,6 @@ lobbySchema.methods.toJSON = function () {
     const lobbyObject = this.toObject()
 
     delete lobbyObject._id
-    delete lobbyObject.isPrivate
     delete lobbyObject.createdAt
     delete lobbyObject.updatedAt
     delete lobbyObject.__v

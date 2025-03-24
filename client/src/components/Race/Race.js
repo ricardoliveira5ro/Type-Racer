@@ -45,6 +45,11 @@ function Race({ socket, mode, initialLobby, isGuest }) {
                 setLobby(data.lobby)
         });
 
+        socket.on("player-disconnected", (data) => {
+            if (data.lobby.code === lobby.code)
+                setLobby(data.lobby)
+        });
+
         socket.on("countdown-started", (data) => {
             if (data.lobby.code === lobby.code)
                 setLobby(data.lobby)
@@ -67,6 +72,7 @@ function Race({ socket, mode, initialLobby, isGuest }) {
             socket.off("playerJoined");
             socket.off("countdown-started");
             socket.off("player-progress");
+            socket.off("player-disconnected");
         }
     }, [socket, lobby, distanceToMove])
 
@@ -122,10 +128,15 @@ function Race({ socket, mode, initialLobby, isGuest }) {
     // Leaving lobby (not closing socket)
     useEffect(() => {
         return () => {
-            const updateOrDelete = async () => {
-                await LobbyAPI.updateOrDeleteOnUserLeave(socket.id, lobby.code)
+            if (lobby.isPrivate && !lobby.startCountDown) {
+                socket.emit('player-left-custom', { lobby, user: socket.id })
+
+            } else {
+                const updateOrDelete = async () => {
+                    await LobbyAPI.updateOrDeleteOnUserLeave(socket.id, lobby.code)
+                }
+                updateOrDelete()
             }
-            updateOrDelete()
         }
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 

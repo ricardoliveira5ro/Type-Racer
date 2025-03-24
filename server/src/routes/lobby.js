@@ -124,7 +124,7 @@ router.get('/custom', guestMiddleware, async (req, res, next) => {
             lobby = new Lobby({ players: [player], quote: quote, isPrivate: true })
 
         } else {
-            lobby = await Lobby.findOne({ code: req.query.code.toLowerCase() })
+            lobby = await Lobby.findOne({ code: req.query.code.toLowerCase() }).populate('quote')
 
             if (!lobby) 
                 throw new AppError("Lobby not found", 404)
@@ -146,7 +146,7 @@ router.get('/custom', guestMiddleware, async (req, res, next) => {
         res.send({ lobby: lobby })
 
         const socket = req.app.get('socketIO')
-        socket.emit('player-joined-custom', { lobby })
+        socket.to(lobby.code).emit('playerJoined', { lobby })
 
     } catch (e) {
         next(e)
