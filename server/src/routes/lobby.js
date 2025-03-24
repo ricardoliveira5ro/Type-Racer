@@ -145,6 +145,9 @@ router.get('/custom', guestMiddleware, async (req, res, next) => {
 
         res.send({ lobby: lobby })
 
+        const socket = req.app.get('socketIO')
+        socket.emit('player-joined-custom', { lobby })
+
     } catch (e) {
         next(e)
     }
