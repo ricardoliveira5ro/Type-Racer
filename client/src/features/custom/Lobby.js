@@ -1,6 +1,34 @@
+import { useEffect } from 'react';
+
 import { Car, Copy } from 'lucide-react';
 
-function CustomLobby({ socket, lobby }) {
+function CustomLobby({ socket, lobby, setLobby }) {
+
+    useEffect(() => {
+        if (!socket) return
+
+        socket.on("player-joined-custom", (data) => {
+            if (data.lobby.code === lobby.code)
+                setLobby(data.lobby)
+        });
+
+        socket.on("player-disconnected", (data) => {
+            if (data.lobby.code === lobby.code)
+                setLobby(data.lobby)
+        })
+
+        return () => {
+            socket.off("player-disconnected");
+            socket.off("player-joined-custom");
+        }
+    }, [socket, lobby, setLobby])
+
+    // Leaving lobby (not closing socket)
+    useEffect(() => {
+        return () => {
+            socket.emit('player-left-custom', { lobby, user: socket.id })
+        }
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <div className="flex flex-col px-4 py-3 items-center justify-center bg-white rounded-md gap-y-4 min-w-96">

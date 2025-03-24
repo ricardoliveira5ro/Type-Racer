@@ -68,12 +68,34 @@ io.on('connection', (socket) => {
         socket.to(lobby.code).emit("player-progress", { lobby: updatedLobby })
     })
 
+    // Left custom lobby
+    socket.on("player-left-custom", async (data) => {
+        const { lobby: lobbyData, user } = data
+
+        const lobby = await Lobby.findOne({ code: lobbyData.code })
+
+        if (!lobby) return
+
+        lobby.players = lobby.players.filter(player => player.user !== user)
+        await lobby.save()
+
+        socket.broadcast.emit('player-disconnected', { lobby });
+    })
+
     // Handle disconnection
     socket.on('disconnect', async () => {
         const lobbies = await Lobby.find({ "players.user": socket.id })
 
         for (const lobby of lobbies) {
-            await handleOnUserLeave(lobby, socket.id)
+            if (lobby.isPrivate) {
+                lobby.players = lobby.players.filter(player => player.user !== socket.id)
+                await lobby.save()
+
+                socket.broadcast.emit('player-disconnected', { lobby });
+            }
+            else {
+                await handleOnUserLeave(lobby, socket.id)
+            }
         }
     });
 })

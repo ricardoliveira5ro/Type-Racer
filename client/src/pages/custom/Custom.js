@@ -36,7 +36,7 @@ function Custom ({ socket }) {
                 <Alert text={alertText} type={alertType} onDismissAlert={() => dismissAlert()} />
             }
             {!lobby && <CustomJoinLobby loadLobby={loadLobby} />}
-            {lobby && <CustomLobby socket={socket} lobby={lobby} />}
+            {lobby && <CustomLobby socket={socket} lobby={lobby} setLobby={setLobby} />}
         </div>
     )
 }
