@@ -27,5 +27,12 @@ export const useCustomLobby = (isUserLoading, user, socket, create, code, showAl
         fetchLobby();
     }, [create, code]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    return { lobby, isLoading }
+    const startRace = async (socketID, code) => {
+        const { success, data } = await LobbyAPI.startCustom(socketID, code)
+
+        if (success)
+            setLobby(data.lobby)
+    }
+
+    return { lobby, isLoading, startRace }
 };

@@ -19,7 +19,7 @@ function Custom ({ socket }) {
     const [code, setCode] = useState(null)
     const [create, setCreate] = useState(null)
 
-    const { isLoading: isLobbyLoading, lobby } = useCustomLobby(isUserLoading, userInfo, socket, create, code, showAlert)
+    const { isLoading: isLobbyLoading, lobby, startRace } = useCustomLobby(isUserLoading, userInfo, socket, create, code, showAlert)
 
     return (
         <div className="flex flex-col items-center gap-y-12 px-10 py-7">
@@ -38,7 +38,9 @@ function Custom ({ socket }) {
                                 <span className='text-[var(--green)] text-lg'>{lobby.code}</span>
                                 <Copy color="white" />
                             </div>
-                            {socket.id === lobby.players[0].user &&<button className='px-8 py-1.5 rounded-md bg-[var(--green)]'>Start Race</button>}
+                            {socket.id === lobby.players[0].user &&
+                                <button onClick={() => startRace(socket.id, lobby.code)} className='px-8 py-1.5 rounded-md bg-[var(--green)]'>Start Race</button>
+                            }
                         </div>
                     }
                 </>

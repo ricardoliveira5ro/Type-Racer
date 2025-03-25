@@ -153,4 +153,27 @@ router.get('/custom', guestMiddleware, async (req, res, next) => {
     }
 })
 
+// Start race
+router.post('/custom/:code', async (req, res, next) => {
+    try {
+        const socketID = req.headers['x-socket-id']
+        const code = req.params.code
+
+        const lobby = await Lobby.findOne({ code: code }).populate('quote')
+
+        if (!lobby || lobby.players[0].user !== socketID) return
+
+        lobby.startCountDown = true
+        await lobby.save()
+
+        res.send({ lobby: lobby })
+
+        const socket = req.app.get('socketIO')
+        socket.to(lobby.code).emit('countdown-started', { lobby })
+
+    } catch (e) {
+        next(e)
+    }
+})
+
 module.exports = router

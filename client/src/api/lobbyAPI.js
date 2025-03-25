@@ -76,6 +76,24 @@ export const LobbyAPI = {
             return { success: false, error };
         }
     },
+
+    startCustom: async (socketID, code, cancel = false) => {
+        try {
+            const response = await api.request({
+                url: `/lobby/custom/${code}`,
+                method: 'POST',
+                headers: {
+                    'X-Socket-ID': socketID
+                },
+                signal: cancel ? cancelApiObject[this.startCustom.name].handleRequestCancellation().signal : undefined,
+            })
+
+            return { success: true, data: response.data }
+
+        } catch (error) {
+            return { success: false, error };
+        }
+    }
 }
 
 const cancelApiObject = defineCancelApiObject(LobbyAPI)
