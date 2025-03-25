@@ -12,14 +12,15 @@ import CountDownTimer from '../Timer/CountdownTimer';
 import RaceAnalysis from '../RaceAnalysis/RaceAnalysis';
 
 import './Race.css'
+import { Copy } from 'lucide-react';
 
 function Race({ socket, mode, initialLobby, isGuest }) {
 
-    const { isRacing, setIsRacing, hasEnded, wordIndex, typedWords, remainingWords, correctWordPart, wrongWordPart, currentWord, userInput, setUserInput, userInputRef, inputBgColor, wpm, accuracy, elapsedTime, setElapsedTime, distanceToMove } 
-            = useQuoteTyping(initialLobby.quote, initialLobby.players.findIndex(p => p.user === socket.id))
-
     const [lobby, setLobby] = useState(initialLobby)
     const [finalPosition, setFinalPosition] = useState(1)
+    
+    const { isRacing, setIsRacing, hasEnded, wordIndex, typedWords, remainingWords, correctWordPart, wrongWordPart, currentWord, userInput, setUserInput, userInputRef, inputBgColor, wpm, accuracy, elapsedTime, setElapsedTime, distanceToMove } 
+            = useQuoteTyping(initialLobby.quote, lobby.players.findIndex(p => p.user === socket.id))
 
     useEffect(() => {
         if (!lobby.startCountDown) return 
@@ -135,6 +136,13 @@ function Race({ socket, mode, initialLobby, isGuest }) {
         }
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+    const startRace = async (socketID, code) => {
+        const { success, data } = await LobbyAPI.startCustom(socketID, code)
+
+        if (success)
+            setLobby(data.lobby)
+    }
+
     return (
         <div className='flex flex-col gap-y-8'>
             <div className='flex justify-center items-center gap-x-4'>
@@ -184,6 +192,18 @@ function Race({ socket, mode, initialLobby, isGuest }) {
                     </div>
                 </div>
             </div>
+            {(!lobby.startCountDown) &&
+                <div className="flex items-center w-full gap-x-6">
+                    <div className='flex items-center gap-x-2 cursor-pointer' onClick={() => navigator.clipboard.writeText(lobby.code)}>
+                        <p className="text-white">Code:</p>
+                        <span className='text-[var(--green)] text-lg'>{lobby.code}</span>
+                        <Copy color="white" />
+                    </div>
+                    {socket.id === lobby.players[0].user &&
+                        <button onClick={() => startRace(socket.id, lobby.code)} className='px-8 py-1.5 rounded-md bg-[var(--green)]'>Start Race</button>
+                    }
+                </div>
+            }
             {hasEnded && <RaceAnalysis quote={initialLobby.quote} stats={{ wpm, accuracy, elapsedTime, position: finalPosition }} />}
         </div>
     );
