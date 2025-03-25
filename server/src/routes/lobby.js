@@ -105,7 +105,16 @@ router.post('/:code', async (req, res, next) => {
 
     if (!lobby) return
 
-    await handleOnUserLeave(lobby, socketID)
+    if (lobby.isPrivate && !lobby.startCountDown && lobby.players.length > 1) {
+        lobby.players = lobby.players.filter(player => player.user !== socketID)
+        await lobby.save()
+
+        const socket = req.app.get('socketIO')
+        socket.to(lobby.code).emit('player-disconnected', { lobby });
+
+    } else {
+        await handleOnUserLeave(lobby, socketID)
+    }
 
     res.send({ message: "Successfully deleted or updated" })
 })
@@ -135,6 +144,10 @@ router.get('/custom', guestMiddleware, async (req, res, next) => {
     
             if (lobby.players.length >= 4) {
                 throw new AppError("The lobby is full", 401)
+            }
+
+            if (lobby.players.find(p => p.user === req.headers['x-socket-id'])) {
+                throw new AppError("Could not join this lobby", 401)
             }
     
             lobby.players.push(player)
