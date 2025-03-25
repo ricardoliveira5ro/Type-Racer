@@ -128,15 +128,10 @@ function Race({ socket, mode, initialLobby, isGuest }) {
     // Leaving lobby (not closing socket)
     useEffect(() => {
         return () => {
-            if (lobby.isPrivate && !lobby.startCountDown) {
-                socket.emit('player-left-custom', { lobby, user: socket.id })
-
-            } else {
-                const updateOrDelete = async () => {
-                    await LobbyAPI.updateOrDeleteOnUserLeave(socket.id, lobby.code)
-                }
-                updateOrDelete()
+            const updateOrDelete = async () => {
+                await LobbyAPI.updateOrDeleteOnUserLeave(socket.id, lobby.code)
             }
+            updateOrDelete()
         }
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 

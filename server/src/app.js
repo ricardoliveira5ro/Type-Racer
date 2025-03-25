@@ -87,7 +87,7 @@ io.on('connection', (socket) => {
         const lobbies = await Lobby.find({ "players.user": socket.id })
 
         for (const lobby of lobbies) {
-            if (lobby.isPrivate && !lobby.startCountDown) {
+            if (lobby.isPrivate && !lobby.startCountDown && lobby.players.length > 1) {
                 lobby.players = lobby.players.filter(player => player.user !== socket.id)
                 await lobby.save()
 
