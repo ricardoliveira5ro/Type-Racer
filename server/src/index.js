@@ -1,4 +1,4 @@
-require("dotenv").config({ path: __dirname + `/config/.env.dev` });
+require("dotenv").config({ path: __dirname + `/config/.env` });
 
 const app = require('./app')
 
