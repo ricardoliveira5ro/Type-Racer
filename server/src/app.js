@@ -16,7 +16,7 @@ const Lobby = require('./models/lobby')
 
 const { handleOnUserLeave } = require('./utils/functions')
 
-require("dotenv").config({ path: path.resolve(__dirname, './config/.env.dev') });
+require("dotenv").config({ path: path.resolve(__dirname, './config/.env') });
 require('./db/mongoose')
 
 const app = express()
@@ -38,12 +38,15 @@ const server = http.createServer(app)
 // Seed data
 seedData()
 
-const io = new Server(server, {
-    cors: {
+const options = {};
+if (process.env.NODE_ENV === "development") {
+    options.cors = {
         origin: "http://localhost:3000",
         credentials: true
-    }
-})
+    };
+}
+
+const io = new Server(server, options)
 
 // Socket rooms connection
 io.on('connection', (socket) => {
