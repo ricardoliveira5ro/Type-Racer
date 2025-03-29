@@ -3,8 +3,12 @@ require("dotenv").config({ path: path.resolve(__dirname, '../config/.env') });
 
 const mongoose = require('mongoose')
 
-console.log("DB_CONNECTION_URL: ", process.env.DB_CONNECTION_URL);
-
 const DB_CONNECTION_URL = process.env.DB_CONNECTION_URL
 
-mongoose.connect(`${DB_CONNECTION_URL}`)
+// mongoose.connect(`${DB_CONNECTION_URL}`)
+
+mongoose.connect(DB_CONNECTION_URL, {
+    serverSelectionTimeoutMS: 120000, // 120 seconds
+})
+.then(() => console.log('MongoDB connected'))
+.catch(err => console.error('MongoDB connection error:', err));
