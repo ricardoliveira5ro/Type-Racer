@@ -17,7 +17,12 @@ const Lobby = require('./models/lobby')
 const { handleOnUserLeave } = require('./utils/functions')
 
 require("dotenv").config({ path: path.resolve(__dirname, './config/.env') });
+
+console.log('Before connecting to db')
+
 require('./db/mongoose')
+
+console.log('After connecting')
 
 const app = express()
 
@@ -35,8 +40,12 @@ app.use(express.json());
 
 const server = http.createServer(app)
 
+console.log('Before seeding data')
+
 // Seed data
 seedData()
+
+console.log('After seeding data')
 
 const options = {};
 if (process.env.NODE_ENV === "development") {
