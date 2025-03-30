@@ -4,11 +4,7 @@ const jsonfile = require('jsonfile')
 const Quote = require('../models/quote')
 
 const seedData = async () => {
-    console.log('Trying to count documents')
-
     const quotesCount = await Quote.countDocuments({}, { hint: "_id_" })
-
-    console.log('Counted successfully')
     
     if (quotesCount == 0) {
         jsonfile.readFile(path.join(__dirname, 'quotes.json'))
