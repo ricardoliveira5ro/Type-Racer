@@ -143,7 +143,7 @@ router.post('/recovery', async (req, res, next) => {
 
         await user.save()
 
-        const domain = process.env.NODE_ENV === "development" ? "http://localhost:3000" : "to-be-changed"
+        const domain = `${req.protocol}://${req.get('host')}`;
         const link = `${domain}/reset-password?user=${user.username}&reset_token=${uuid}`
         const html = recoveryTemplate(user, link)
 
