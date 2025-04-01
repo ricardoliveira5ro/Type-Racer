@@ -135,7 +135,7 @@ router.get('/custom', guestMiddleware, async (req, res, next) => {
         } else {
             lobby = await Lobby.findOne({ code: req.query.code.toLowerCase() }).populate('quote')
 
-            if (!lobby) 
+            if (!lobby || !lobby.isPrivate) 
                 throw new AppError("Lobby not found", 404)
     
             if (lobby.startCountDown) {
@@ -174,7 +174,7 @@ router.post('/custom/:code', async (req, res, next) => {
 
         const lobby = await Lobby.findOne({ code: code }).populate('quote')
 
-        if (!lobby || lobby.players[0].user !== socketID) return
+        if (!lobby || lobby.players[0].user !== socketID || !lobby.isPrivate) return
 
         lobby.startCountDown = true
         await lobby.save()
