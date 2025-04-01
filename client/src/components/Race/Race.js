@@ -192,7 +192,7 @@ function Race({ socket, mode, initialLobby, isGuest }) {
                     </div>
                 </div>
             </div>
-            {(!lobby.startCountDown) &&
+            {(mode === 'Custom' && !lobby.startCountDown) &&
                 <div className="flex items-center w-full gap-x-6">
                     <div className='flex items-center gap-x-2 cursor-pointer' onClick={() => navigator.clipboard.writeText(lobby.code)}>
                         <p className="text-white">Code:</p>
