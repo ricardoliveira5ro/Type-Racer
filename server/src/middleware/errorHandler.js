@@ -44,14 +44,12 @@ const globalErrorHandler = (err, req, res, next) => {
     if (err.code === 11000) err = duplicatedIndexError(err)
     if (err. name === "ValidationError") err = validationError (err)
 
-    developmentError(err, res);
+    if (process.env.NODE_ENV === "development") {
+        developmentError(err, res);
 
-    // if (process.env.NODE_ENV === "development") {
-    //     developmentError(err, res);
-
-    // } else if (process.env.NODE_ENV === "production") {
-    //     productionError(err, res);
-    // }
+    } else if (process.env.NODE_ENV === "production") {
+        productionError(err, res);
+    }
 };
 
 module.exports = globalErrorHandler;
