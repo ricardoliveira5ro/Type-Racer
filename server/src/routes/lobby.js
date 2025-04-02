@@ -41,7 +41,7 @@ router.get('/find', guestMiddleware, async (req, res, next) => {
             isPrivate: false, 
             startCountDown: false, 
             players: { $not: { $elemMatch: { user: req.headers['x-socket-id'] } } }, 
-            $where: 'this.players.length < 4' 
+            $expr: { $lt: [{ $size: "$players" }, 4] }
         }).populate('quote')
 
         const player = { user: req.headers['x-socket-id'], playerName: req.user?.username || 'Guest', wpm: 0, wordIndex: 0 }
