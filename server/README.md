@@ -23,32 +23,48 @@ The Type Racer backend is a real-time Node.js server built with Express and Sock
 
 `/users`
 
-- `/signup` `POST`: Create a new user account. <ins>Request body</ins> (*username*, *email*, *password*)
-- `/login` `POST`: Authenticate a user. <ins>Request body</ins> (*email*, *password*)
+- `/signup` `POST`:
+    - Creates a new user account
+    - Request body `{ username, email, password }`
+- `/login` `POST`:
+    - Authenticates a user
+    - Request body `{ email, password }`
     - Generates a new authentication token
-    - Splits this token into 2 secure cookies and send to client. The signature cookie is http only
-- `/token` `GET`: Verify token authenticity (Protected routes)
-    - *jwtMiddleware* reconstructs the 2 cookies into the authentication token and set it as authorization request header
-    - *authMiddleware* verify and decode the token in order to find the user
+    - Splits the token into **two secure cookies** sent to the client (signature cookie is `HTTP-only`)
+- `/token` `GET`:
+    - Verifies token authenticity (used for protected routes).
+    - `jwtMiddleware` reconstructs the two cookies into the auth token and sets it as authorization request header
+    - `authMiddleware` decodes and verifies the token to identify the user
     - If the token is invalid the cookies are cleared
-- `/logout` `POST`: Clear cookies and logout client
-    - Uses *jwtMiddleware* and *authMiddleware*
-    - Invalidates session authentication token
-- `/profile` `GET`: Retrieve user profile information
-    - Uses *jwtMiddleware* and *authMiddleware*
-- `/password` `PUT`: Update user password. <ins>Request body</ins> (*oldPassword*, *newPassword*)
-    - Authenticates with old password to verify user
-    - Mongoose model encodes new password before saving `(/models/user.js)`
-    - Uses *jwtMiddleware* and *authMiddleware*
-- `/recovery` `POST`: Request password recovery <ins>Request body</ins> (*email*)
-    - If the user exists (email) then creates *password_reset_token* and *password_reset_expiration* (1 hour), and send to user's email the reset password link using Resend service
-    - The link is composed by protocol/domain/reset-password?user=(user.username)&reset_token=(token) 
-- `/reset-token` `GET`: Verify reset token. <ins>Request query</ins> (*user*, *reset_token*)
-    - *resetMiddleware* decode reset-token from db to verify its authenticity
-- `/reset` `POST`: Reset (update) password. <ins>Request body</ins> (*password*)
-    - *resetMiddleware* decode reset-token from db to verify its authenticity
-- `/players` `GET`: Retrieve number of online players
-    - Counts number of socket clients connected (different browser tabs counted as different players)
+- `/logout` `POST`: 
+    - Clear cookies and logout client
+    - Uses `jwtMiddleware` and `authMiddleware`
+    - Invalidates the session token
+- `/profile` `GET`: 
+    - Retrieves user profile information
+    - Uses `jwtMiddleware` and `authMiddleware`
+- `/password` `PUT`: 
+    - Updates user password 
+    - Request body `{ oldPassword, newPassword }`
+    - Authenticates the user with oldPassword
+    - Mongoose model (`/models/user.js`) hashes the new password before saving
+    - Uses `jwtMiddleware` and `authMiddleware`
+- `/recovery` `POST`:
+    - Initiates password recovery
+    - Request body `{ email }`
+    - If the user exists (email) then creates `password_reset_token` and `password_reset_expiration` (1 hour validity), and sends a reset link via Resend email service
+    - Link format `protocol/domain/reset-password?user=<username>&reset_token=<token>` 
+- `/reset-token` `GET`: 
+    - Verify reset token.
+    - Request body `{ user, reset_token }`
+    - `resetMiddleware` decode reset-token from db to verify its authenticity
+- `/reset` `POST`: 
+    - Resets (updates) the password
+    - Request body `{ password }`
+    - `resetMiddleware` decode reset-token from db to verify its authenticity
+- `/players` `GET`: 
+    - Returns the number of online players
+    - Counts number of socket clients connected (multiple browser tabs count as separate players)
 
 ### 🔌 Tech Stack and Packages
 
