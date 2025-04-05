@@ -17,7 +17,6 @@ The Type Racer backend is a real-time Node.js server built with Express and Sock
 ├── 📄 app.js       # Express setup  
 └── 📄 index.js     # Server entry point 
 ```
-<br>
 
 ### 🌐 API Endpoints
 
@@ -56,7 +55,7 @@ The Type Racer backend is a real-time Node.js server built with Express and Sock
     - Link format `protocol/domain/reset-password?user=<username>&reset_token=<token>` 
 - `/reset-token` `GET`: 
     - Verify reset token.
-    - Request body `{ user, reset_token }`
+    - Request query `{ user, reset_token }`
     - `resetMiddleware` decode reset-token from db to verify its authenticity
 - `/reset` `POST`: 
     - Resets (updates) the password
@@ -65,6 +64,38 @@ The Type Racer backend is a real-time Node.js server built with Express and Sock
 - `/players` `GET`: 
     - Returns the number of online players
     - Counts number of socket clients connected (multiple browser tabs count as separate players)
+
+<br>
+
+`/lobby`
+
+- `/practice` `GET`:
+    - Creates and returns a solo practice lobby
+    - `guestMiddleware` checks if the player is a registered user (proceeds to `jwtMiddleware` and `authMiddleware`) or a guest
+- `/find` `GET`:
+    - Searches for an open multiplayer lobby or creates one
+    - Uses `guestMiddleware` 
+- `/custom` `GET`:
+    - Creates/joins a private custom lobby
+    - Request query `{ create, code }` 
+    - Uses `guestMiddleware`
+- `/<code>` `POST`:
+    - Marks a player as disconnected in the specified lobby
+    - If all players disconnect, the lobby is automatically removed
+    - Request params `{ code }` 
+- `/custom/<code>` `POST`:
+    - Starts the countdown timer for a custom lobby race
+    - Request params `{ code }` 
+    - Uses `guestMiddleware` 
+
+<br>
+
+`/stats`
+
+- `/post-race` `PUT`:
+    - Updates user stats after race completion
+    - Request body `{ position, wpm, accuracy }`
+    - Uses `jwtMiddleware` and `authMiddleware`
 
 ### 🔌 Tech Stack and Packages
 
