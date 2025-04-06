@@ -97,6 +97,17 @@ The Type Racer backend is a real-time Node.js server built with Express and Sock
     - Request body `{ position, wpm, accuracy }`
     - Uses `jwtMiddleware` and `authMiddleware`
 
+### ⚡ Socket Events
+| Event                 | Direction        | Data                          | Description                                                           |
+|-----------------------|------------------|-------------------------------|-----------------------------------------------------------------------|
+| `joinRoom`            | Client -> Server | `{ lobbyCode }`               | Player attempts to join a lobby                                       |
+| `playerJoined`        | Server -> Client | `{ lobby }`                   | Broadcasts updated lobby state to all members when a new player joins |
+| `countdown-started`   | Server -> Client | `{ lobby }`                   | Notifies lobby that race countdown has begun                          |
+| `word-typed`          | Client -> Server | `{ lobby, update }`           | Listens for user's progress in-race                                   |
+| `player-progress`     | Server -> Client | `{ lobby }`                   | Broadcasts real-time progress to all lobby members                    |
+| `player-left-custom`  | Client -> Server | `{ lobby, user (socket.id) }` | Detects disconnections in private lobbies                             |
+| `player-disconnected` | Server -> Client | `{ lobby }`                   | Notifies lobby when a player disconnects (updates remaining players)  |
+
 ### 🔌 Tech Stack and Packages
 
 - Node.js
