@@ -125,3 +125,7 @@ A Lobby will be created if there isn't one to join, the model:
 When creating a new lobby a 10 seconds timeout will be activated, this is the time frame for other players to join.
 After that `startCountDown` will changed to true and send (socket io), to all the players in the lobby, this flag so the countdown timer in every client would start at the same time
 The normal logic will be implemented with socket io at each word typed to communicate between the players client. When the game ends this lobby will be deleted, this could occur when every player disconnects
+
+### Client proxy
+
+- In `package.json` add key `"proxy": "http://localhost:<port>"`
