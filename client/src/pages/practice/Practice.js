@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import Header from "../../components/Header/Header";
 import Race from "../../components/Race/Race";
 
@@ -5,6 +7,10 @@ import { useUserProfile } from "../../hooks/useUserProfile";
 import { usePracticeLobby } from "../../hooks/usePracticeLobby";
 
 function Practice({ socket }) {
+
+    useEffect(() => {
+        document.title = 'Practice';
+    }, []);
 
     const { userInfo, isLoading: isUserLoading } = useUserProfile()
     const { lobby, isLoading: isLobbyLoading } = usePracticeLobby(isUserLoading, userInfo, socket)
