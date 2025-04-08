@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import Alert from "../../components/Alerts/Alert";
 import Header from "../../components/Header/Header";
 import ProfileActions from "../../features/profile/ProfileActions";
@@ -10,6 +12,10 @@ import { usePasswordChange } from "../../hooks/usePasswordChange";
 import { useUserProfile } from "../../hooks/useUserProfile";
 
 const Profile = () => {
+
+    useEffect(() => {
+        document.title = 'Profile';
+    }, []);
 
     const { isActive, alertType, alertText, showAlert, dismissAlert } = useAlert()
     const { setOldPassword, setNewPassword, setConfirmationPassword, isActive: isPasswordContainerActive, setIsActive: setIsPasswordContainerActive, handlePasswordChange } = usePasswordChange()

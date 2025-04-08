@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import Alert from "../../components/Alerts/Alert";
 import ResetForm from "../../features/reset/ResetForm";
 
@@ -5,6 +7,10 @@ import { useAlert } from '../../hooks/useAlert';
 import { usePasswordReset } from '../../hooks/usePasswordReset'
 
 const ResetPassword = () => {
+
+    useEffect(() => {
+        document.title = 'Reset Password';
+    }, []);
 
     const { isActive, alertType, alertText, showAlert, dismissAlert } = useAlert()
     const { setNewPassword, setConfirmationPassword, handlePasswordReset } = usePasswordReset()

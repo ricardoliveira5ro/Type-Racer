@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import { useUserProfile } from "../../hooks/useUserProfile"
 import { useAlert } from "../../hooks/useAlert"
@@ -10,6 +10,10 @@ import Race from "../../components/Race/Race"
 import CustomJoinLobby from "../../features/custom/JoinLobby"
 
 function Custom ({ socket }) {
+
+    useEffect(() => {
+        document.title = 'Custom';
+    }, []);
 
     const { isActive, alertType, alertText, showAlert, dismissAlert } = useAlert()
     const { userInfo, isLoading: isUserLoading } = useUserProfile()

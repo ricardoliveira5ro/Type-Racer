@@ -13,9 +13,14 @@ import SignUpForm from '../../features/authentication/SignUpForm';
 import SignInForm from '../../features/authentication/SignInForm';
 import Overlay from '../../features/authentication/Overlay';
 import Alert from '../../components/Alerts/Alert';
+
 import { MoveLeft } from 'lucide-react';
 
 const Authentication = () => {
+
+    useEffect(() => {
+        document.title = 'Login/SignUp';
+    }, []);
 
     const { formData, errors, handleInputChange, clearInputs, setError } = useFormAuthentication();
     const { isActive, alertType, alertText, showAlert, dismissAlert } = useAlert();

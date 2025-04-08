@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import Header from "../../components/Header/Header";
 import Race from "../../components/Race/Race";
 
@@ -5,6 +7,10 @@ import { useUserProfile } from "../../hooks/useUserProfile";
 import { useFindLobby } from "../../hooks/useFindLobby";
 
 function Multiplayer({ socket }) {
+
+    useEffect(() => {
+        document.title = 'Multiplayer';
+    }, []);
 
     const { userInfo, isLoading: isUserLoading } = useUserProfile()
     const { lobby, isLoading: isLobbyLoading } = useFindLobby(isUserLoading, userInfo, socket)
